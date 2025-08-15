@@ -224,6 +224,9 @@ export default function TestAuthPage() {
               <Link href="/test-ui">
                 <Button variant="outline">🎨 UI Components</Button>
               </Link>
+              <Link href="/test-redis">
+                <Button variant="outline">🚀 Redis Cache Test</Button>
+              </Link>
               <Link href="/unauthorized">
                 <Button variant="outline">🚫 Unauthorized Page</Button>
               </Link>
