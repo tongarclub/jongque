@@ -56,8 +56,8 @@ Based on PRD: `prd-online-queue-booking-system.md`
 - [ ] 1.0 Project Setup and Infrastructure
   - [x] 1.1 Initialize Next.js project with TypeScript and required dependencies
   - [x] 1.2 Configure Tailwind CSS and UI component library setup
-  - [ ] 1.3 Setup Prisma ORM with PostgreSQL database schema
-  - [ ] 1.4 Configure NextAuth.js for authentication with multiple providers
+  - [x] 1.3 Setup Prisma ORM with PostgreSQL database schema
+  - [x] 1.4 Configure NextAuth.js for authentication with multiple providers
   - [ ] 1.5 Setup Redis for caching and session management
   - [ ] 1.6 Configure PWA settings and service worker
   - [ ] 1.7 Setup environment variables and configuration files
