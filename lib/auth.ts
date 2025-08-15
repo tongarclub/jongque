@@ -1,5 +1,5 @@
 import { NextAuthOptions } from "next-auth"
-import { PrismaAdapter } from "@auth/prisma-adapter"
+// import { PrismaAdapter } from "@auth/prisma-adapter" // Disabled for now
 import GoogleProvider from "next-auth/providers/google"
 import FacebookProvider from "next-auth/providers/facebook"
 import CredentialsProvider from "next-auth/providers/credentials"
