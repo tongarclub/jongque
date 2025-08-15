@@ -312,6 +312,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Features**: Auto-deploy, SSL, CDN
 - **Setup**: 5 minutes
 - **Guide**: [deployment/vercel-setup.md](deployment/vercel-setup.md)
+- **Commands**: [deployment/vercel-commands.md](deployment/vercel-commands.md)
 
 ### 🔷 Railway (Full-stack solution)
 - **Cost**: $5 free → $20/month
@@ -327,6 +328,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ### 📋 Deployment Checklist
 See [deployment/deployment-checklist.md](deployment/deployment-checklist.md) for complete deployment guide.
+
+### 🔧 Deployment Commands
+- **Vercel CLI**: [deployment/vercel-commands.md](deployment/vercel-commands.md) - Complete command reference
+- **Quick Reference**: [deployment/vercel-quick-reference.md](deployment/vercel-quick-reference.md) - Essential commands
 
 ## 🗺️ Roadmap
 
