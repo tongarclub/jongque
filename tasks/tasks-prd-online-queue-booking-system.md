@@ -11,7 +11,8 @@ Based on PRD: `prd-online-queue-booking-system.md`
 - `prisma/schema.prisma` - Database schema definition
 - `prisma/seed.ts` - Database seeding script
 - `lib/prisma.ts` - Prisma client configuration
-- `lib/auth.ts` - Authentication configuration and utilities
+- `lib/auth.ts` - Authentication configuration and utilities (NextAuth.js providers)
+- `.env.local` - Environment variables for OAuth client IDs and secrets
 - `lib/redis.ts` - Redis client configuration for caching
 - `lib/notifications/line.ts` - LINE messaging API integration
 - `lib/notifications/email.ts` - Email service integration
@@ -51,6 +52,30 @@ Based on PRD: `prd-online-queue-booking-system.md`
 - Use `npm test` to run tests. Running without a path executes all tests found by the Jest configuration.
 - This is a Next.js 14+ project using App Router, TypeScript, Tailwind CSS, Prisma ORM, and NextAuth.js
 
+### OAuth Configuration Requirements
+
+For OAuth integration (Task 2.2), the following will be needed:
+
+**Google OAuth:**
+- Google Cloud Console project setup
+- OAuth 2.0 Client ID and Client Secret
+- Authorized redirect URIs configuration
+- Environment variables: `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`
+
+**Facebook OAuth:**
+- Facebook Developer App creation
+- App ID and App Secret configuration
+- Valid OAuth redirect URIs setup
+- Environment variables: `FACEBOOK_CLIENT_ID`, `FACEBOOK_CLIENT_SECRET`
+
+**LINE Login:**
+- LINE Developers Console channel setup
+- Channel ID and Channel Secret configuration
+- Callback URL registration
+- Environment variables: `LINE_CLIENT_ID`, `LINE_CLIENT_SECRET`
+
+**Current Status:** OAuth providers are configured in `lib/auth.ts` but require proper client credentials and testing.
+
 ## Tasks
 
 - [x] 1.0 Project Setup and Infrastructure
@@ -69,7 +94,13 @@ Based on PRD: `prd-online-queue-booking-system.md`
 
 - [x] 2.0 Authentication and User Management System
   - [x] 2.1 Create user registration and login pages with form validation
-  - [x] 2.2 Implement OAuth integration (Google, Facebook, LINE)
+  - [ ] 2.2 Implement OAuth integration (Google, Facebook, LINE)
+    - [ ] 2.2.1 Configure Google OAuth provider in NextAuth.js
+    - [ ] 2.2.2 Setup Facebook OAuth provider and app configuration
+    - [ ] 2.2.3 Implement LINE Login integration for Thai users
+    - [ ] 2.2.4 Add OAuth login buttons to signin/signup pages
+    - [ ] 2.2.5 Handle OAuth user profile data and account linking
+    - [ ] 2.2.6 Test OAuth flows and error handling
   - [ ] 2.3 Setup email verification and password reset functionality
   - [ ] 2.4 Create user profile management interface
   - [x] 2.5 Implement role-based access control (customer vs business owner)
