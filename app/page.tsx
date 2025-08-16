@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { PWAInstallButton } from "@/components/ui";
 
 export default function Home() {
   return (
@@ -26,15 +27,40 @@ export default function Home() {
             <li className="mb-2 tracking-[-.01em]">
               ✅ Feature 1.5: <strong>Redis Cache & Session</strong> - ระบบ caching และ session
             </li>
+            <li className="mb-2 tracking-[-.01em]">
+              ✅ Feature 1.6: <strong>PWA (Progressive Web App)</strong> - ติดตั้งเป็นแอปได้
+            </li>
             <li className="tracking-[-.01em]">
               🚧 พร้อมสำหรับการพัฒนาต่อ - Core Queue Booking System
             </li>
           </ol>
         </div>
 
+        {/* PWA Install Section */}
+        <div className="w-full max-w-2xl bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900 dark:to-purple-900 rounded-lg p-6 mb-6 border border-blue-100 dark:border-blue-800">
+          <h3 className="text-lg font-semibold mb-3 text-center text-blue-900 dark:text-blue-100">📱 ติดตั้งแอป JongQue</h3>
+          <p className="text-sm text-blue-700 dark:text-blue-300 text-center mb-4">
+            ติดตั้งเป็นแอปบนหน้าจอหลักเพื่อประสบการณ์ที่ดีขึ้น
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <PWAInstallButton 
+              variant="default"
+              size="lg"
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+            />
+            <div className="text-xs text-blue-600 dark:text-blue-400 text-center sm:text-left">
+              <div className="flex flex-col gap-1">
+                <span>✨ ใช้งานแบบ offline ได้</span>
+                <span>🚀 เปิดเร็วด้วย cache</span>
+                <span>📱 เหมือน native app</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="w-full max-w-2xl bg-gray-50 dark:bg-gray-800 rounded-lg p-6 mb-6">
           <h3 className="text-lg font-semibold mb-4 text-center">🧪 หน้าทดสอบระบบ</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <a
               className="rounded-lg border border-solid border-transparent transition-colors flex flex-col items-center justify-center bg-blue-600 text-white gap-2 hover:bg-blue-700 font-medium text-sm h-20 px-4"
               href="/test-auth"
@@ -55,6 +81,13 @@ export default function Home() {
             >
               <span className="text-xl">🎨</span>
               <span>UI Components</span>
+            </a>
+            <a
+              className="rounded-lg border border-solid border-purple-200 dark:border-purple-600 transition-colors flex flex-col items-center justify-center bg-purple-50 dark:bg-purple-900 text-purple-700 dark:text-purple-300 gap-2 hover:bg-purple-100 dark:hover:bg-purple-800 font-medium text-sm h-20 px-4"
+              href="/test-pwa"
+            >
+              <span className="text-xl">📱</span>
+              <span>PWA Test</span>
             </a>
           </div>
         </div>

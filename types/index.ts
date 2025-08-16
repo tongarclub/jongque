@@ -266,3 +266,13 @@ export type ApiError = {
   statusCode?: number
   validationErrors?: ValidationError[]
 }
+
+// PWA types
+declare global {
+  interface Window {
+    workbox?: {
+      addEventListener: (event: string, callback: (event: any) => void) => void
+      register: () => Promise<ServiceWorkerRegistration>
+    }
+  }
+}

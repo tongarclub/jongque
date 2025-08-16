@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # PostgreSQL Database
   postgres:
@@ -7,9 +5,9 @@ services:
     container_name: jongque-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_DB: jongque
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: jongque_db
+      POSTGRES_USER: jongque_user
+      POSTGRES_PASSWORD: jongque_pass
     ports:
       - "5432:5432"
     volumes:
@@ -39,12 +37,10 @@ services:
       target: development
     container_name: jongque-app
     restart: unless-stopped
+    env_file:
+      - docker.env
     environment:
       - NODE_ENV=development
-      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/jongque
-      - REDIS_URL=redis://redis:6379
-      - NEXTAUTH_URL=http://localhost:3000
-      - NEXTAUTH_SECRET=your-secret-key-here
     ports:
       - "3000:3000"
     volumes:
@@ -66,8 +62,8 @@ services:
       target: development
     container_name: jongque-prisma-studio
     restart: unless-stopped
-    environment:
-      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/jongque
+    env_file:
+      - docker.env
     ports:
       - "5555:5555"
     volumes:

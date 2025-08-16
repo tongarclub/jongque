@@ -1,0 +1,53 @@
+<svg width="640" height="1136" viewBox="0 0 640 1136" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="640" height="1136" fill="#f8fafc"/>
+  
+  <!-- Status Bar -->
+  <rect width="640" height="44" fill="#3b82f6"/>
+  <text x="320" y="28" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16" font-weight="bold">JongQue</text>
+  
+  <!-- Header -->
+  <rect x="20" y="64" width="600" height="80" fill="white" rx="12"/>
+  <text x="320" y="95" text-anchor="middle" fill="#1f2937" font-family="Arial, sans-serif" font-size="20" font-weight="bold">📱 ระบบจองคิวออนไลน์</text>
+  <text x="320" y="120" text-anchor="middle" fill="#6b7280" font-family="Arial, sans-serif" font-size="14">JongQue - Progressive Web App</text>
+  
+  <!-- PWA Install Button -->
+  <rect x="180" y="164" width="280" height="60" fill="#3b82f6" rx="30"/>
+  <text x="320" y="185" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14">📱 ติดตั้งแอป</text>
+  <text x="320" y="205" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">Install to Home Screen</text>
+  
+  <!-- Features -->
+  <rect x="20" y="244" width="600" height="200" fill="white" rx="12"/>
+  <text x="320" y="270" text-anchor="middle" fill="#1f2937" font-family="Arial, sans-serif" font-size="18" font-weight="bold">✨ PWA Features</text>
+  
+  <text x="40" y="300" fill="#059669" font-family="Arial, sans-serif" font-size="14">✅ Offline ใช้งานได้แม้ไม่มีเน็ต</text>
+  <text x="40" y="325" fill="#059669" font-family="Arial, sans-serif" font-size="14">✅ เปิดเร็วด้วย Service Worker Cache</text>
+  <text x="40" y="350" fill="#059669" font-family="Arial, sans-serif" font-size="14">✅ ติดตั้งบนหน้าจอหลักได้</text>
+  <text x="40" y="375" fill="#059669" font-family="Arial, sans-serif" font-size="14">✅ ประสบการณ์เหมือน Native App</text>
+  <text x="40" y="400" fill="#059669" font-family="Arial, sans-serif" font-size="14">✅ Push Notifications</text>
+  <text x="40" y="425" fill="#059669" font-family="Arial, sans-serif" font-size="14">✅ App Shortcuts สำหรับ Quick Actions</text>
+  
+  <!-- Test Buttons -->
+  <rect x="20" y="464" width="600" height="160" fill="white" rx="12"/>
+  <text x="320" y="490" text-anchor="middle" fill="#1f2937" font-family="Arial, sans-serif" font-size="18" font-weight="bold">🧪 Testing Pages</text>
+  
+  <!-- Test Button Grid -->
+  <rect x="40" y="510" width="120" height="60" fill="#3b82f6" rx="8"/>
+  <text x="100" y="535" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">🔐 Auth</text>
+  <text x="100" y="550" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="10">Test</text>
+  
+  <rect x="180" y="510" width="120" height="60" fill="#059669" rx="8"/>
+  <text x="240" y="535" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">🚀 Redis</text>
+  <text x="240" y="550" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="10">Cache</text>
+  
+  <rect x="320" y="510" width="120" height="60" fill="#7c3aed" rx="8"/>
+  <text x="380" y="535" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">🎨 UI</text>
+  <text x="380" y="550" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="10">Components</text>
+  
+  <rect x="460" y="510" width="120" height="60" fill="#dc2626" rx="8"/>
+  <text x="520" y="535" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">📱 PWA</text>
+  <text x="520" y="550" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="10">Test</text>
+  
+  <!-- Footer -->
+  <text x="320" y="660" text-anchor="middle" fill="#6b7280" font-family="Arial, sans-serif" font-size="12">Made with ❤️ in Thailand 🇹🇭</text>
+</svg>
