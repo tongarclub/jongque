@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "@/components/providers/SessionProvider";
 import { PWAServiceWorker } from "@/components/PWAServiceWorker";
+import { ForceServiceWorker } from "@/components/ForceServiceWorker";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -68,6 +69,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <PWAServiceWorker />
+        <ForceServiceWorker />
         <SessionProvider>
           {children}
         </SessionProvider>
