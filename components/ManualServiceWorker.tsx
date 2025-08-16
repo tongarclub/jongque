@@ -12,7 +12,7 @@ export function ManualServiceWorker() {
           
           // Unregister all existing service workers first
           const registrations = await navigator.serviceWorker.getRegistrations()
-          for (let registration of registrations) {
+          for (const registration of registrations) {
             await registration.unregister()
             console.log('🗑️ Unregistered old Service Worker')
           }
