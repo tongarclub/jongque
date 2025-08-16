@@ -18,20 +18,22 @@ export function ManualServiceWorker() {
           }
 
           // Register new service worker - try both manual and next-pwa generated
-          let registration
-          try {
-            registration = await navigator.serviceWorker.register('/manual-sw.js', {
-              scope: '/',
-              updateViaCache: 'none'
-            })
-            console.log('✅ Manual SW registered')
-          } catch (error) {
-            console.log('⚠️ Manual SW failed, trying next-pwa SW...')
-            registration = await navigator.serviceWorker.register('/sw.js', {
-              scope: '/',
-              updateViaCache: 'none'
-            })
-          }
+          const registration = await (async () => {
+            try {
+              const reg = await navigator.serviceWorker.register('/manual-sw.js', {
+                scope: '/',
+                updateViaCache: 'none'
+              })
+              console.log('✅ Manual SW registered')
+              return reg
+            } catch {
+              console.log('⚠️ Manual SW failed, trying next-pwa SW...')
+              return await navigator.serviceWorker.register('/sw.js', {
+                scope: '/',
+                updateViaCache: 'none'
+              })
+            }
+          })()
           
           console.log('✅ Manual Service Worker registered successfully:', registration)
           
