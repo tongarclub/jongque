@@ -18,13 +18,43 @@ export const metadata: Metadata = {
   description: "ระบบจองคิวออนไลน์สำหรับร้านเสริมสวย คลินิก ฟิตเนส และร้านอาหาร",
   keywords: "จองคิว, ออนไลน์, ร้านเสริมสวย, คลินิก, ฟิตเนส, ร้านอาหาร",
   authors: [{ name: "JongQue Team" }],
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "JongQue",
+  },
+  formatDetection: {
+    telephone: false,
+  },
   openGraph: {
     title: "JongQue - ระบบจองคิวออนไลน์",
     description: "ระบบจองคิวออนไลน์สำหรับร้านเสริมสวย คลินิก ฟิตเนส และร้านอาหาร",
     type: "website",
     locale: "th_TH",
   },
+  icons: {
+    icon: [
+      { url: "/icons/icon-192x192.svg", sizes: "192x192", type: "image/svg+xml" },
+      { url: "/icons/icon-512x512.svg", sizes: "512x512", type: "image/svg+xml" },
+    ],
+    apple: [
+      { url: "/icons/icon-152x152.svg", sizes: "152x152", type: "image/svg+xml" },
+      { url: "/icons/icon-192x192.svg", sizes: "192x192", type: "image/svg+xml" },
+    ],
+  },
 };
+
+export function generateViewport() {
+  return {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+    viewportFit: "cover",
+    themeColor: "#3b82f6",
+  }
+}
 
 export default function RootLayout({
   children,

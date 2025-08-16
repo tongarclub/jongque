@@ -1,0 +1,38 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="256" cy="256" r="240" fill="#3b82f6" stroke="#1e40af" stroke-width="8"/>
+  
+  <!-- Queue Icon - People in line -->
+  <g fill="#ffffff">
+    <!-- Person 1 -->
+    <circle cx="180" cy="180" r="25"/>
+    <rect x="160" y="210" width="40" height="60" rx="20"/>
+    
+    <!-- Person 2 -->
+    <circle cx="256" cy="180" r="25"/>
+    <rect x="236" y="210" width="40" height="60" rx="20"/>
+    
+    <!-- Person 3 -->
+    <circle cx="332" cy="180" r="25"/>
+    <rect x="312" y="210" width="40" height="60" rx="20"/>
+  </g>
+  
+  <!-- Queue Lines -->
+  <g stroke="#ffffff" stroke-width="4" stroke-linecap="round">
+    <line x1="140" y1="320" x2="200" y2="320"/>
+    <line x1="220" y1="320" x2="280" y2="320"/>
+    <line x1="300" y1="320" x2="360" y2="320"/>
+  </g>
+  
+  <!-- Clock Icon -->
+  <g fill="#ffffff">
+    <circle cx="400" cy="120" r="35" fill="#10b981"/>
+    <circle cx="400" cy="120" r="30" fill="#ffffff"/>
+    <circle cx="400" cy="120" r="3" fill="#10b981"/>
+    <line x1="400" y1="120" x2="400" y2="100" stroke="#10b981" stroke-width="3" stroke-linecap="round"/>
+    <line x1="400" y1="120" x2="415" y2="120" stroke="#10b981" stroke-width="2" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Thai Text "คิว" -->
+  <text x="256" y="420" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="#ffffff" text-anchor="middle">คิว</text>
+</svg>

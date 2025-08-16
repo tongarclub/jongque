@@ -87,9 +87,14 @@ npm run db:seed
 npm run dev
 ```
 
-### 🎨 Test UI Components
+### 🧪 Testing Pages
 
-Visit `http://localhost:3000/test-ui` to see all UI components in action.
+JongQue มี test pages สำหรับทดสอบฟีเจอร์ต่างๆ:
+
+- **UI Components**: `http://localhost:3000/test-ui` - ทดสอบ UI components ทั้งหมด
+- **Authentication**: `http://localhost:3000/test-auth` - ทดสอบระบบ auth และ roles
+- **PWA Features**: `http://localhost:3000/test-pwa` - ทดสอบ PWA functionality
+- **Redis Cache**: `http://localhost:3000/test-redis` - ทดสอบ Redis caching
 
 ## 📦 Available Scripts
 
@@ -166,12 +171,31 @@ docker-compose logs app        # View app logs
 - `PUT /api/businesses/:id` - Update business
 - `GET /api/businesses/:id/analytics` - Get analytics
 
-## 📱 PWA Features
+## 📱 PWA (Progressive Web App) Features
 
-- ✅ Offline capability
-- ✅ Install prompt
-- ✅ Push notifications
-- ✅ Responsive design
+JongQue เป็น PWA เต็มรูปแบบที่ให้ประสบการณ์เหมือน native app:
+
+- ✅ **Offline capability** - ใช้งานได้แม้ไม่มีอินเทอร์เน็ต
+- ✅ **Install to home screen** - ติดตั้งบนหน้าจอหลักได้
+- ✅ **Standalone mode** - เปิดแบบ full-screen ไม่มี browser bar
+- ✅ **Advanced caching** - โหลดเร็วด้วย service worker caching
+- ✅ **App shortcuts** - Quick actions จากหน้าจอหลัก
+- ✅ **Responsive design** - ปรับตัวตามขนาดหน้าจอ
+- ✅ **Thai language support** - รองรับภาษาไทยใน manifest
+
+### 🧪 PWA Testing
+
+**Quick Test**: ไปที่ `http://localhost:3000/test-pwa`
+
+**Guides**:
+- 📋 **Quick Reference**: [PWA-QUICK-REFERENCE.md](PWA-QUICK-REFERENCE.md)
+- 📚 **Complete Guide**: [PWA-TESTING-GUIDE.md](PWA-TESTING-GUIDE.md)
+
+### 📱 Mobile Installation
+
+1. **Chrome Android**: ดู install prompt หรือ Menu > "Add to Home screen"
+2. **Safari iOS**: Share button > "Add to Home Screen"  
+3. **Desktop Chrome**: Address bar มี install icon
 
 ## 🐳 Docker Configuration
 
