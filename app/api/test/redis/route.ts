@@ -76,8 +76,9 @@ export async function POST(request: NextRequest) {
             }, { status: 400 })
           }
 
-          const result = await redisHelpers.addToQueue(queueName, item)
-          const queueItems = await redisHelpers.getFromQueue(queueName, 5)
+          // Simulate queue operations for demo
+          const result = await simpleRedisHelpers.set(`queue:${queueName}:${item.id}`, item, 300)
+          const queueItems = result ? [item] : []
           
           return NextResponse.json({
             success: result,

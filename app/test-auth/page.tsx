@@ -6,7 +6,7 @@ import Link from "next/link"
 import { Button, Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui"
 
 export default function TestAuthPage() {
-  const { user, isLoading, isAuthenticated, hasRole, isCustomer, isBusinessOwner, isAdmin } = useAuth()
+  const { user, isLoading, isAuthenticated, isCustomer, isBusinessOwner, isAdmin } = useAuth()
 
   if (isLoading) {
     return (

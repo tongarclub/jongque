@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { simpleRedisHelpers } from '@/lib/redis-simple'
+// import { simpleRedisHelpers } from '@/lib/redis-simple' // Unused import
 
 export async function GET() {
   const services = {

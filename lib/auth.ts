@@ -77,7 +77,7 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user, account }) {
+    async jwt({ token, user }) {
       if (user) {
         // Get user from database to get latest info
         const dbUser = await prisma.user.findUnique({

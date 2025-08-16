@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Button, Input, Modal, Label, Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui"
+import { Button, Input, Modal, Label, Card, CardHeader, CardTitle, CardContent } from "@/components/ui"
 
 export default function TestUIPage() {
   const [isModalOpen, setIsModalOpen] = useState(false)

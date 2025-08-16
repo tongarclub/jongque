@@ -103,7 +103,7 @@ export const simpleRedisHelpers = {
     try {
       const client = await getRedisClient()
       return client ? client.isOpen : false
-    } catch (error) {
+    } catch {
       return false
     }
   },

@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
+import Link from "next/link"
 import { Button, Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui"
 
 interface CacheTestResult {
@@ -18,6 +19,8 @@ interface HealthStatus {
     redis: string
   }
   timestamp: string
+  error?: string
+  note?: string
 }
 
 export default function TestRedisPage() {
@@ -25,11 +28,6 @@ export default function TestRedisPage() {
   const [testResults, setTestResults] = useState<CacheTestResult[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [cacheStats, setCacheStats] = useState<any>(null)
-
-  // Check health status on page load
-  useEffect(() => {
-    checkHealthStatus()
-  }, [])
 
   // Helper function for fetch with timeout
   const fetchWithTimeout = async (url: string, options: any = {}, timeout: number = 5000) => {
@@ -57,7 +55,7 @@ export default function TestRedisPage() {
     }
   }
 
-  const checkHealthStatus = async () => {
+  const checkHealthStatus = useCallback(async () => {
     try {
       const data = await fetchWithTimeout('/api/health-simple', {}, 3000)
       setHealthStatus(data)
@@ -75,7 +73,12 @@ export default function TestRedisPage() {
         note: 'Server APIs are experiencing timeouts. You can still test the UI functionality.'
       })
     }
-  }
+  }, [])
+
+  // Check health status on page load
+  useEffect(() => {
+    checkHealthStatus()
+  }, [checkHealthStatus])
 
   const runSingleTest = async (testType: string) => {
     setIsLoading(true)
@@ -90,7 +93,7 @@ export default function TestRedisPage() {
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ action: 'ping' })
             }, 3000)
-          } catch (error) {
+          } catch {
             // Demo mode - simulate successful ping
             console.log('🔄 API timeout, using demo mode')
             return {
@@ -793,9 +796,9 @@ export default function TestRedisPage() {
               <a href="/test-ui">
                 <Button variant="outline">🎨 UI Components</Button>
               </a>
-              <a href="/">
+              <Link href="/">
                 <Button variant="outline">🏠 หน้าหลัก</Button>
-              </a>
+              </Link>
             </div>
           </CardContent>
         </Card>

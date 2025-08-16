@@ -42,7 +42,7 @@ function SignInContent() {
       } else {
         router.push(callbackUrl)
       }
-    } catch (error) {
+    } catch {
       setError("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง")
     } finally {
       setIsLoading(false)
@@ -53,7 +53,7 @@ function SignInContent() {
     setIsLoading(true)
     try {
       await signIn(provider, { callbackUrl })
-    } catch (error) {
+    } catch {
       setError("เกิดข้อผิดพลาดในการเข้าสู่ระบบ")
       setIsLoading(false)
     }
