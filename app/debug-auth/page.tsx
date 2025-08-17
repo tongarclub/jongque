@@ -1,7 +1,8 @@
 "use client"
 
 import { useEffect, useState } from 'react'
-import { useSession } from 'next-auth/react'
+import { useSession, signOut } from 'next-auth/react'
+import Link from 'next/link'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui'
 
 interface AuthStatus {
@@ -149,19 +150,19 @@ export default function DebugAuthPage() {
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
-            <a 
+            <Link 
               href="/signin" 
               className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
             >
               Go to Sign In
-            </a>
+            </Link>
             <br />
-            <a 
-              href="/api/auth/signout" 
+            <button 
+              onClick={() => signOut()} 
               className="inline-block bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
             >
               Sign Out
-            </a>
+            </button>
             <br />
             <button 
               onClick={() => window.location.reload()} 
