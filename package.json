@@ -19,7 +19,8 @@
     "prod:db:migrate": "node scripts/production-db-migrate.js",
     "prod:db:seed": "node scripts/production-db-seed.js",
     "deploy:prod": "node scripts/deploy-to-production.js",
-    "deploy:quick": "bash scripts/quick-deploy.sh"
+    "deploy:quick": "bash scripts/quick-deploy.sh",
+    "generate:screenshots": "node scripts/generate-screenshots.js"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

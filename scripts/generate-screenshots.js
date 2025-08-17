@@ -1,3 +1,73 @@
+#!/usr/bin/env node
+
+/**
+ * Generate PWA Screenshots
+ * This script creates simple HTML-based screenshots for PWA manifest
+ */
+
+const fs = require('fs')
+const path = require('path')
+
+// Create screenshots directory if it doesn't exist
+const screenshotsDir = path.join(__dirname, '..', 'public', 'screenshots')
+if (!fs.existsSync(screenshotsDir)) {
+  fs.mkdirSync(screenshotsDir, { recursive: true })
+}
+
+// Mobile screenshot (640x1136)
+const mobileScreenshot = `
+<svg width="640" height="1136" viewBox="0 0 640 1136" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="640" height="1136" fill="#f8fafc"/>
+  
+  <!-- Header -->
+  <rect width="640" height="100" fill="#3b82f6"/>
+  <text x="320" y="40" text-anchor="middle" fill="white" font-family="system-ui, sans-serif" font-size="24" font-weight="bold">JongQue</text>
+  <text x="320" y="70" text-anchor="middle" fill="white" font-family="system-ui, sans-serif" font-size="16">ระบบจองคิวออนไลน์</text>
+  
+  <!-- Main Content -->
+  <rect x="20" y="120" width="600" height="120" fill="white" rx="12" stroke="#e5e7eb"/>
+  <text x="50" y="155" fill="#1f2937" font-family="system-ui, sans-serif" font-size="20" font-weight="600">🏪 ร้านเสริมสวย ABC</text>
+  <text x="50" y="180" fill="#6b7280" font-family="system-ui, sans-serif" font-size="14">เปิด: 09:00 - 18:00</text>
+  <text x="50" y="200" fill="#10b981" font-family="system-ui, sans-serif" font-size="14">✅ พร้อมให้บริการ</text>
+  <rect x="480" y="140" width="120" height="40" fill="#3b82f6" rx="20"/>
+  <text x="540" y="165" text-anchor="middle" fill="white" font-family="system-ui, sans-serif" font-size="14">จองคิว</text>
+  
+  <!-- Queue Status -->
+  <rect x="20" y="260" width="600" height="100" fill="white" rx="12" stroke="#e5e7eb"/>
+  <text x="50" y="290" fill="#1f2937" font-family="system-ui, sans-serif" font-size="18" font-weight="600">📊 สถานะคิวปัจจุบัน</text>
+  <text x="50" y="315" fill="#6b7280" font-family="system-ui, sans-serif" font-size="14">คิวที่กำลังให้บริการ: A001</text>
+  <text x="50" y="340" fill="#6b7280" font-family="system-ui, sans-serif" font-size="14">คิวรอ: 5 คิว</text>
+  
+  <!-- Features -->
+  <rect x="20" y="380" width="280" height="80" fill="white" rx="12" stroke="#e5e7eb"/>
+  <text x="40" y="410" fill="#1f2937" font-family="system-ui, sans-serif" font-size="16" font-weight="600">⚡ จองออนไลน์</text>
+  <text x="40" y="430" fill="#6b7280" font-family="system-ui, sans-serif" font-size="12">จองคิวได้ 24/7</text>
+  <text x="40" y="445" fill="#6b7280" font-family="system-ui, sans-serif" font-size="12">ไม่ต้องรอที่ร้าน</text>
+  
+  <rect x="320" y="380" width="300" height="80" fill="white" rx="12" stroke="#e5e7eb"/>
+  <text x="340" y="410" fill="#1f2937" font-family="system-ui, sans-serif" font-size="16" font-weight="600">📱 PWA App</text>
+  <text x="340" y="430" fill="#6b7280" font-family="system-ui, sans-serif" font-size="12">ติดตั้งได้เหมือนแอป</text>
+  <text x="340" y="445" fill="#6b7280" font-family="system-ui, sans-serif" font-size="12">ใช้งานได้แม้ offline</text>
+  
+  <!-- Bottom Navigation -->
+  <rect x="0" y="1036" width="640" height="100" fill="white" stroke="#e5e7eb"/>
+  <rect x="80" y="1056" width="60" height="60" fill="#f3f4f6" rx="30"/>
+  <text x="110" y="1090" text-anchor="middle" fill="#3b82f6" font-family="system-ui, sans-serif" font-size="24">🏠</text>
+  
+  <rect x="200" y="1056" width="60" height="60" fill="#f3f4f6" rx="30"/>
+  <text x="230" y="1090" text-anchor="middle" fill="#6b7280" font-family="system-ui, sans-serif" font-size="24">📅</text>
+  
+  <rect x="320" y="1056" width="60" height="60" fill="#f3f4f6" rx="30"/>
+  <text x="350" y="1090" text-anchor="middle" fill="#6b7280" font-family="system-ui, sans-serif" font-size="24">📊</text>
+  
+  <rect x="440" y="1056" width="60" height="60" fill="#f3f4f6" rx="30"/>
+  <text x="470" y="1090" text-anchor="middle" fill="#6b7280" font-family="system-ui, sans-serif" font-size="24">👤</text>
+</svg>
+`
+
+// Desktop screenshot (1280x720)
+const desktopScreenshot = `
 <svg width="1280" height="720" viewBox="0 0 1280 720" fill="none" xmlns="http://www.w3.org/2000/svg">
   <!-- Background -->
   <rect width="1280" height="720" fill="#f8fafc"/>
@@ -64,3 +134,14 @@
   <text x="600" y="470" fill="#6b7280" font-family="system-ui, sans-serif" font-size="14">ตัดผม</text>
   <text x="800" y="470" fill="#f59e0b" font-family="system-ui, sans-serif" font-size="14">🟡 รอคิว</text>
 </svg>
+`
+
+// Write screenshots
+fs.writeFileSync(path.join(screenshotsDir, 'mobile-1.svg'), mobileScreenshot.trim())
+fs.writeFileSync(path.join(screenshotsDir, 'desktop-1.svg'), desktopScreenshot.trim())
+
+console.log('✅ PWA Screenshots generated successfully!')
+console.log('📱 Mobile screenshot: /screenshots/mobile-1.svg (640x1136)')
+console.log('🖥️  Desktop screenshot: /screenshots/desktop-1.svg (1280x720)')
+console.log('')
+console.log('These screenshots will be used in the PWA install dialog.')
