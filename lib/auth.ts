@@ -4,8 +4,37 @@ import GoogleProvider from "next-auth/providers/google"
 import FacebookProvider from "next-auth/providers/facebook"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { prisma } from "@/lib/prisma"
-// import bcrypt from "bcryptjs" // TODO: Add password authentication
+import bcrypt from "bcryptjs"
 import { UserRole } from "@prisma/client"
+
+// Custom LINE Login Provider
+const LineProvider = {
+  id: "line",
+  name: "LINE",
+  type: "oauth" as const,
+  authorization: {
+    url: "https://access.line.me/oauth2/v2.1/authorize",
+    params: {
+      scope: "profile openid email",
+      response_type: "code",
+    },
+  },
+  token: "https://api.line.me/oauth2/v2.1/token",
+  userinfo: "https://api.line.me/v2/profile",
+  client: {
+    token_endpoint_auth_method: "client_secret_post",
+  },
+  clientId: process.env.LINE_CLIENT_ID,
+  clientSecret: process.env.LINE_CLIENT_SECRET,
+  profile(profile: any) {
+    return {
+      id: profile.userId,
+      name: profile.displayName,
+      email: profile.email || null,
+      image: profile.pictureUrl,
+    }
+  },
+}
 
 export const authOptions: NextAuthOptions = {
   // adapter: PrismaAdapter(prisma), // Temporarily disabled due to type conflicts
@@ -13,18 +42,29 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   pages: {
-    signIn: "/auth/signin",
-    error: "/auth/error",
+    signIn: "/signin",
+    error: "/error",
   },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      authorization: {
+        params: {
+          scope: "openid email profile",
+        },
+      },
     }),
     FacebookProvider({
       clientId: process.env.FACEBOOK_CLIENT_ID!,
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
+      authorization: {
+        params: {
+          scope: "email public_profile",
+        },
+      },
     }),
+    LineProvider as any,
     CredentialsProvider({
       name: "credentials",
       credentials: {
@@ -49,20 +89,22 @@ export const authOptions: NextAuthOptions = {
           return null
         }
 
-        // For OAuth users, password might not be set
-        if (!credentials.password) {
+        // Check if user has a password (for credentials auth)
+        if (!user.password) {
+          console.log("User has no password set:", user.email)
           return null
         }
 
-        // TODO: Add password field to User model for credentials auth
-        // const isPasswordValid = await bcrypt.compare(
-        //   credentials.password,
-        //   user.password
-        // )
+        // Verify password
+        const isPasswordValid = await bcrypt.compare(
+          credentials.password,
+          user.password
+        )
 
-        // if (!isPasswordValid) {
-        //   return null
-        // }
+        if (!isPasswordValid) {
+          console.log("Invalid password for user:", user.email)
+          return null
+        }
 
         return {
           id: user.id,
@@ -103,28 +145,62 @@ export const authOptions: NextAuthOptions = {
       return session
     },
     async signIn({ user, account }) {
-      if (account?.provider === "google" || account?.provider === "facebook") {
+      if (account?.provider === "google" || account?.provider === "facebook" || account?.provider === "line") {
         try {
-          // Check if user exists
-          const existingUser = await prisma.user.findUnique({
-            where: { email: user.email! },
-          })
+          // Check if user exists by email or by provider account
+          let existingUser = null
+          
+          if (user.email) {
+            existingUser = await prisma.user.findUnique({
+              where: { email: user.email },
+            })
+          }
+
+          if (!existingUser) {
+            // For LINE users without email, check by provider account
+            const existingAccount = await prisma.account.findUnique({
+              where: {
+                provider_providerAccountId: {
+                  provider: account.provider,
+                  providerAccountId: account.providerAccountId,
+                },
+              },
+              include: { user: true },
+            })
+            
+            if (existingAccount) {
+              existingUser = existingAccount.user
+            }
+          }
 
           if (!existingUser) {
             // Create new user for OAuth
+            const userData: any = {
+              name: user.name!,
+              image: user.image,
+              role: UserRole.CUSTOMER,
+              isVerified: true, // OAuth users are pre-verified
+            }
+            
+            // Only add email if it exists (LINE might not provide email)
+            if (user.email) {
+              userData.email = user.email
+            }
+            
             await prisma.user.create({
-              data: {
-                email: user.email!,
-                name: user.name!,
-                image: user.image,
-                role: UserRole.CUSTOMER,
-                isVerified: true, // OAuth users are pre-verified
-              },
+              data: userData,
+            })
+          } else if (user.email && !existingUser.email && account?.provider === "line") {
+            // Update existing user with email if LINE provides it
+            await prisma.user.update({
+              where: { id: existingUser.id },
+              data: { email: user.email },
             })
           }
+          
           return true
         } catch (error) {
-          console.error("Error during sign in:", error)
+          console.error("Error during OAuth sign in:", error)
           return false
         }
       }

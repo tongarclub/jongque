@@ -2,88 +2,81 @@
 
 import { useEffect } from 'react'
 
+// Extend Window interface for workbox
+declare global {
+  interface Window {
+    workbox?: any
+  }
+}
+
 export function PWAServiceWorker() {
   useEffect(() => {
     // Only log in development
     const isDev = process.env.NODE_ENV === 'development'
     
-    if (isDev) {
-      console.log('PWAServiceWorker: Component mounted')
-      console.log('PWAServiceWorker: window available:', typeof window !== 'undefined')
-      console.log('PWAServiceWorker: serviceWorker supported:', typeof window !== 'undefined' && 'serviceWorker' in navigator)
-      console.log('PWAServiceWorker: workbox available:', typeof window !== 'undefined' && window.workbox !== undefined)
+    // Safety check for client-side only
+    if (typeof window === 'undefined') {
+      if (isDev) console.log('PWAServiceWorker: Server-side, skipping')
+      return
     }
 
-    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-      if (isDev) console.log('PWAServiceWorker: Starting service worker registration')
-      
-      // Wait for page load to avoid blocking
-      const registerSW = () => {
-        // Try workbox first
-        if (window.workbox !== undefined) {
-          if (isDev) console.log('PWAServiceWorker: Using workbox registration')
-          const wb = window.workbox
-          
-          // Add event listener to detect when new service worker is waiting
-          wb.addEventListener('waiting', () => {
-            if (isDev) console.log('PWAServiceWorker: A new service worker is available, waiting for activation')
-          })
+    // Check if service worker is supported
+    if (!('serviceWorker' in navigator)) {
+      if (isDev) console.log('PWAServiceWorker: Service Worker not supported')
+      return
+    }
 
-          // Add event listener to detect when service worker is updated
-          wb.addEventListener('controlling', () => {
-            if (isDev) console.log('PWAServiceWorker: Service worker is now controlling the page')
-            window.location.reload()
-          })
+    if (isDev) {
+      console.log('PWAServiceWorker: Component mounted')
+      console.log('PWAServiceWorker: serviceWorker supported: true')
+    }
 
-          // Add event listener to detect when service worker has installed for the first time
-          wb.addEventListener('installed', () => {
-            if (isDev) console.log('PWAServiceWorker: Service worker installed for the first time')
-          })
-
-          // Register the service worker
-          wb.register()
-            .then((registration) => {
-              if (isDev) console.log('PWAServiceWorker: Workbox registration successful:', registration)
-            })
-            .catch((error) => {
-              console.error('PWAServiceWorker: Workbox registration failed:', error)
-            })
-        } else {
-          if (isDev) console.log('PWAServiceWorker: Using manual registration')
-          // Fallback manual registration if workbox is not available
-          navigator.serviceWorker
-            .register('/sw.js', {
-              scope: '/',
-              updateViaCache: 'none'
-            })
-            .then((registration) => {
-              if (isDev) {
-                console.log('PWAServiceWorker: Manual registration successful:', registration)
-                console.log('PWAServiceWorker: Registration scope:', registration.scope)
-                console.log('PWAServiceWorker: Registration active:', registration.active)
-                console.log('PWAServiceWorker: Registration installing:', registration.installing)
-                console.log('PWAServiceWorker: Registration waiting:', registration.waiting)
-              }
-              
-              // Check for updates
-              registration.addEventListener('updatefound', () => {
-                if (isDev) console.log('PWAServiceWorker: Update found')
-              })
-            })
-            .catch((error) => {
-              console.error('PWAServiceWorker: Manual registration failed:', error)
-            })
+    // Simple service worker registration without workbox
+    const registerSW = async () => {
+      try {
+        if (isDev) console.log('PWAServiceWorker: Starting registration')
+        
+        const registration = await navigator.serviceWorker.register('/sw.js', {
+          scope: '/',
+          updateViaCache: 'none'
+        })
+        
+        if (isDev) {
+          console.log('PWAServiceWorker: Registration successful:', registration)
+          console.log('PWAServiceWorker: Registration scope:', registration.scope)
         }
+        
+        // Check for updates
+        registration.addEventListener('updatefound', () => {
+          if (isDev) console.log('PWAServiceWorker: Update found')
+        })
+        
+      } catch (error) {
+        if (isDev) console.error('PWAServiceWorker: Registration failed:', error)
       }
+    }
 
-      // Register after page load
-      if (document.readyState === 'complete') {
-        registerSW()
-      } else {
-        window.addEventListener('load', registerSW)
-      }
+    // Register with timeout protection
+    const timeoutId = setTimeout(() => {
+      if (isDev) console.log('PWAServiceWorker: Timeout reached, skipping registration')
+    }, 3000) // 3 second timeout
+
+    if (document.readyState === 'complete') {
+      clearTimeout(timeoutId)
+      registerSW()
     } else {
-      if (isDev) console.log('PWAServiceWorker: Service Worker not supported or window not available')
+      const handleLoad = () => {
+        clearTimeout(timeoutId)
+        registerSW()
+        window.removeEventListener('load', handleLoad)
+      }
+      window.addEventListener('load', handleLoad)
+      
+      // Cleanup function
+      return () => {
+        clearTimeout(timeoutId)
+        window.removeEventListener('load', handleLoad)
+      }
     }
   }, [])
 

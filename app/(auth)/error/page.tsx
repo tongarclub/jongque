@@ -92,7 +92,7 @@ function ErrorContent() {
           )}
         </CardContent>
         <CardFooter className="flex flex-col space-y-3">
-          <Link href="/auth/signin" className="w-full">
+          <Link href="/signin" className="w-full">
             <Button className="w-full">
               ลองเข้าสู่ระบบอีกครั้ง
             </Button>

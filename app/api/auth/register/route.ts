@@ -2,11 +2,13 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { UserRole } from "@prisma/client"
 import { z } from "zod"
+import bcrypt from "bcryptjs"
 
 const registerSchema = z.object({
   name: z.string().min(2, "ชื่อต้องมีอย่างน้อย 2 ตัวอักษร"),
   email: z.string().email("รูปแบบอีเมลไม่ถูกต้อง"),
   phone: z.string().optional(),
+  password: z.string().min(6, "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร").optional(),
   role: z.enum([UserRole.CUSTOMER, UserRole.BUSINESS_OWNER]),
 })
 
@@ -39,12 +41,19 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Hash password if provided
+    let hashedPassword = null
+    if (validatedData.password) {
+      hashedPassword = await bcrypt.hash(validatedData.password, 12)
+    }
+
     // Create new user
     const user = await prisma.user.create({
       data: {
         name: validatedData.name,
         email: validatedData.email,
         phone: validatedData.phone || null,
+        password: hashedPassword,
         role: validatedData.role,
         isVerified: false, // Will be verified via email
       },

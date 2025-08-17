@@ -18,6 +18,7 @@ export function PWAInstallButton({
   const [isInstallable, setIsInstallable] = useState(false)
   const [isInstalled, setIsInstalled] = useState(false)
   const [installStatus, setInstallStatus] = useState<string>("")
+  const [isInstalling, setIsInstalling] = useState(false)
 
   useEffect(() => {
     // Check if we're in browser environment
@@ -63,6 +64,7 @@ export function PWAInstallButton({
       return
     }
 
+    setIsInstalling(true)
     setInstallStatus("กำลังติดตั้ง...")
     
     try {
@@ -81,6 +83,8 @@ export function PWAInstallButton({
     } catch (error) {
       setInstallStatus("เกิดข้อผิดพลาดในการติดตั้ง")
       console.error('Installation failed:', error)
+    } finally {
+      setIsInstalling(false)
     }
 
     // Clear status after 3 seconds
@@ -108,18 +112,28 @@ export function PWAInstallButton({
         variant={variant}
         size={size}
         className={className}
+        disabled={isInstalling}
       >
-        <span className="mr-2">📱</span>
-        {isInstallable ? "ติดตั้งแอป" : "ทดสอบ PWA"}
+        {isInstalling ? (
+          <>
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current mr-2"></div>
+            กำลังติดตั้ง...
+          </>
+        ) : (
+          <>
+            <span className="mr-2">📱</span>
+            {isInstallable ? "ติดตั้งแอป" : "ทดสอบ PWA"}
+          </>
+        )}
       </Button>
       
-      {installStatus && (
+      {installStatus && !isInstalling && (
         <p className="text-xs text-gray-600 text-center max-w-32">
           {installStatus}
         </p>
       )}
       
-      {!isInstallable && !isInstalled && (
+      {!isInstallable && !isInstalled && !isInstalling && (
         <p className="text-xs text-gray-500 text-center max-w-48">
           เปิดใน Chrome หรือ Safari บนมือถือเพื่อติดตั้ง
         </p>

@@ -17,6 +17,7 @@ model User {
   phone     String?  @unique
   name      String?
   image     String?
+  password  String?  // For credentials authentication
   role      UserRole @default(CUSTOMER)
   isVerified Boolean @default(false)
   createdAt DateTime @default(now())
