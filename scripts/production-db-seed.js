@@ -66,7 +66,6 @@ async function seedProductionDatabase() {
       update: {
         name: 'JongQue Demo Restaurant',
         description: 'ร้านอาหารตัวอย่างสำหรับระบบจองคิว',
-        category: 'RESTAURANT',
         phone: '02-123-4567',
         address: '123 ถนนสุขุมวิท กรุงเทพฯ 10110',
         isActive: true,
@@ -75,7 +74,6 @@ async function seedProductionDatabase() {
         id: 'sample-business-1',
         name: 'JongQue Demo Restaurant',
         description: 'ร้านอาหารตัวอย่างสำหรับระบบจองคิว',
-        category: 'RESTAURANT',
         phone: '02-123-4567',
         address: '123 ถนนสุขุมวิท กรุงเทพฯ 10110',
         ownerId: businessOwner.id,
@@ -125,17 +123,17 @@ async function seedProductionDatabase() {
     await prisma.subscription.upsert({
       where: { businessId: business.id },
       update: {
-        plan: 'BASIC',
+        tier: 'BASIC',
         status: 'ACTIVE',
-        startDate: new Date(),
-        endDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year
+        currentPeriodStart: new Date(),
+        currentPeriodEnd: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year
       },
       create: {
         businessId: business.id,
-        plan: 'BASIC',
+        tier: 'BASIC',
         status: 'ACTIVE',
-        startDate: new Date(),
-        endDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year
+        currentPeriodStart: new Date(),
+        currentPeriodEnd: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year
       },
     })
     console.log('   ✅ Subscription created')

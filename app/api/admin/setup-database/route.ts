@@ -23,7 +23,7 @@ export async function POST() {
     
     // Create Admin User
     const adminPassword = await bcrypt.hash('admin123', 12)
-    const admin = await prisma.user.create({
+    await prisma.user.create({
       data: {
         email: 'admin@jongque.com',
         name: 'System Administrator',
@@ -51,7 +51,6 @@ export async function POST() {
         id: 'sample-business-1',
         name: 'JongQue Demo Restaurant',
         description: 'ร้านอาหารตัวอย่างสำหรับระบบจองคิว',
-        category: 'RESTAURANT',
         phone: '02-123-4567',
         address: '123 ถนนสุขุมวิท กรุงเทพฯ 10110',
         ownerId: businessOwner.id,
@@ -86,10 +85,10 @@ export async function POST() {
     await prisma.subscription.create({
       data: {
         businessId: business.id,
-        plan: 'BASIC',
+        tier: 'BASIC',
         status: 'ACTIVE',
-        startDate: new Date(),
-        endDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year
+        currentPeriodStart: new Date(),
+        currentPeriodEnd: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year
       },
     })
     

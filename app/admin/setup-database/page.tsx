@@ -82,7 +82,7 @@ export default function SetupDatabasePage() {
             </div>
             
             <div className="bg-green-50 p-4 rounded border border-green-200">
-              <h3 className="font-semibold text-green-800 mb-2">After setup, you'll have:</h3>
+              <h3 className="font-semibold text-green-800 mb-2">After setup, you&apos;ll have:</h3>
               <ul className="list-disc ml-6 space-y-1 text-green-700">
                 <li>Admin user: admin@jongque.com / admin123</li>
                 <li>Business owner: owner@jongque.com / owner123</li>
