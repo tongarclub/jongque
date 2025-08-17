@@ -9,9 +9,11 @@ export function PWAServiceWorker() {
     // Only log in development
     const isDev = process.env.NODE_ENV === 'development'
     
-    // In production, let next-pwa handle service worker registration
-    if (!isDev) {
-      return
+    // Log PWA status in both dev and production
+    if (isDev) {
+      console.log('PWAServiceWorker: Development mode - manual registration')
+    } else {
+      console.log('PWAServiceWorker: Production mode - next-pwa should handle registration')
     }
     
     // Safety check for client-side only
@@ -31,28 +33,46 @@ export function PWAServiceWorker() {
       console.log('PWAServiceWorker: serviceWorker supported: true')
     }
 
-    // Simple service worker registration for development only
+    // Service worker registration for both dev and production
     const registerSW = async () => {
       try {
-        if (isDev) console.log('PWAServiceWorker: Starting registration')
+        console.log('PWAServiceWorker: Starting registration')
         
         const registration = await navigator.serviceWorker.register('/sw.js', {
           scope: '/',
           updateViaCache: 'none'
         })
         
-        if (isDev) {
-          console.log('PWAServiceWorker: Registration successful:', registration)
-          console.log('PWAServiceWorker: Registration scope:', registration.scope)
-        }
+        console.log('PWAServiceWorker: Registration successful:', registration)
+        console.log('PWAServiceWorker: Registration scope:', registration.scope)
         
         // Check for updates
         registration.addEventListener('updatefound', () => {
-          if (isDev) console.log('PWAServiceWorker: Update found')
+          console.log('PWAServiceWorker: Update found')
         })
         
+        // Check if service worker is active
+        if (registration.active) {
+          console.log('PWAServiceWorker: Service Worker is active')
+        } else if (registration.installing) {
+          console.log('PWAServiceWorker: Service Worker is installing')
+        } else if (registration.waiting) {
+          console.log('PWAServiceWorker: Service Worker is waiting')
+        }
+        
       } catch (error) {
-        if (isDev) console.error('PWAServiceWorker: Registration failed:', error)
+        console.error('PWAServiceWorker: Registration failed:', error)
+        
+        // Fallback: try to register with different options
+        if (!isDev) {
+          try {
+            console.log('PWAServiceWorker: Trying fallback registration')
+            const fallbackRegistration = await navigator.serviceWorker.register('/sw.js')
+            console.log('PWAServiceWorker: Fallback registration successful:', fallbackRegistration)
+          } catch (fallbackError) {
+            console.error('PWAServiceWorker: Fallback registration also failed:', fallbackError)
+          }
+        }
       }
     }
 

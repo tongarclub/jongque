@@ -42,17 +42,42 @@ async function deployToProduction() {
     console.log('✅ Connection successful')
     
     console.log('')
-    console.log('🔄 Step 2: Adding password column if missing...')
+    console.log('🔄 Step 2: Checking database schema...')
     
-    // Check if password column exists
+    // Check if User table exists
     try {
-      await prisma.$queryRaw`SELECT password FROM "User" LIMIT 1`
-      console.log('✅ Password column already exists')
+      await prisma.$queryRaw`SELECT 1 FROM "User" LIMIT 1`
+      console.log('✅ User table exists')
+      
+      // Check if password column exists
+      try {
+        await prisma.$queryRaw`SELECT password FROM "User" LIMIT 1`
+        console.log('✅ Password column already exists')
+      } catch (error) {
+        if (error.message.includes('column "password" does not exist')) {
+          console.log('🔧 Adding password column...')
+          await prisma.$executeRaw`ALTER TABLE "User" ADD COLUMN "password" TEXT`
+          console.log('✅ Password column added')
+        } else {
+          throw error
+        }
+      }
     } catch (error) {
-      if (error.message.includes('column "password" does not exist')) {
-        console.log('🔧 Adding password column...')
-        await prisma.$executeRaw`ALTER TABLE "User" ADD COLUMN "password" TEXT`
-        console.log('✅ Password column added')
+      if (error.message.includes('relation "User" does not exist')) {
+        console.log('🔧 Database is empty, running migrations...')
+        
+        // Run migrations using Prisma
+        const { execSync } = require('child_process')
+        try {
+          execSync('npx prisma db push', { 
+            stdio: 'inherit',
+            env: { ...process.env, DATABASE_URL: productionUrl }
+          })
+          console.log('✅ Database schema created')
+        } catch (migrationError) {
+          console.error('❌ Migration failed:', migrationError.message)
+          throw new Error('Failed to create database schema')
+        }
       } else {
         throw error
       }
@@ -133,13 +158,13 @@ async function deployToProduction() {
     console.log('🔄 Step 7: Creating operating hours...')
     
     const daysOfWeek = [
-      { day: 'MONDAY', open: '09:00', close: '22:00' },
-      { day: 'TUESDAY', open: '09:00', close: '22:00' },
-      { day: 'WEDNESDAY', open: '09:00', close: '22:00' },
-      { day: 'THURSDAY', open: '09:00', close: '22:00' },
-      { day: 'FRIDAY', open: '09:00', close: '23:00' },
-      { day: 'SATURDAY', open: '10:00', close: '23:00' },
-      { day: 'SUNDAY', open: '10:00', close: '21:00' },
+      { day: 1, name: 'Monday', open: '09:00', close: '22:00' },    // 1 = Monday
+      { day: 2, name: 'Tuesday', open: '09:00', close: '22:00' },   // 2 = Tuesday
+      { day: 3, name: 'Wednesday', open: '09:00', close: '22:00' }, // 3 = Wednesday
+      { day: 4, name: 'Thursday', open: '09:00', close: '22:00' },  // 4 = Thursday
+      { day: 5, name: 'Friday', open: '09:00', close: '23:00' },    // 5 = Friday
+      { day: 6, name: 'Saturday', open: '10:00', close: '23:00' },  // 6 = Saturday
+      { day: 0, name: 'Sunday', open: '10:00', close: '21:00' },    // 0 = Sunday
     ]
     
     for (const schedule of daysOfWeek) {
