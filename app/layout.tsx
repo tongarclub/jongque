@@ -71,6 +71,10 @@ export default function RootLayout({
         <SessionProvider>
           {children}
         </SessionProvider>
+        {/* Service Worker Registration for Production */}
+        {process.env.NODE_ENV === 'production' && (
+          <script src="/register-sw.js" async />
+        )}
       </body>
     </html>
   );

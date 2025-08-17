@@ -110,10 +110,22 @@ async function main() {
   // Create operating hours (Monday to Sunday)
   const operatingHours = []
   for (let day = 1; day <= 7; day++) {
-    const hours = await prisma.operatingHours.create({
-      data: {
-        dayOfWeek: day === 7 ? 0 : day, // Convert Sunday to 0
-        openTime: day === 0 ? '10:00' : '09:00', // Sunday opens later
+    const dayOfWeek = day === 7 ? 0 : day // Convert Sunday to 0
+    const hours = await prisma.operatingHours.upsert({
+      where: {
+        businessId_dayOfWeek: {
+          businessId: business.id,
+          dayOfWeek: dayOfWeek,
+        },
+      },
+      update: {
+        openTime: dayOfWeek === 0 ? '10:00' : '09:00', // Sunday opens later
+        closeTime: '18:00',
+        isOpen: true,
+      },
+      create: {
+        dayOfWeek: dayOfWeek,
+        openTime: dayOfWeek === 0 ? '10:00' : '09:00', // Sunday opens later
         closeTime: '18:00',
         isOpen: true,
         businessId: business.id,
@@ -138,8 +150,19 @@ async function main() {
   }
 
   // Create subscription
-  const subscription = await prisma.subscription.create({
-    data: {
+  const subscription = await prisma.subscription.upsert({
+    where: {
+      businessId: business.id,
+    },
+    update: {
+      tier: SubscriptionTier.PRO,
+      status: SubscriptionStatus.TRIALING,
+      currentPeriodStart: new Date(),
+      currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days trial
+      trialStart: new Date(),
+      trialEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+    },
+    create: {
       tier: SubscriptionTier.PRO,
       status: SubscriptionStatus.TRIALING,
       currentPeriodStart: new Date(),
@@ -152,8 +175,10 @@ async function main() {
 
   // Create sample customers
   const customers = await Promise.all([
-    prisma.user.create({
-      data: {
+    prisma.user.upsert({
+      where: { email: 'customer1@gmail.com' },
+      update: {},
+      create: {
         email: 'customer1@gmail.com',
         name: 'สมใจ ใจดี',
         phone: '081-111-1111',
@@ -161,8 +186,10 @@ async function main() {
         isVerified: true,
       },
     }),
-    prisma.user.create({
-      data: {
+    prisma.user.upsert({
+      where: { email: 'customer2@gmail.com' },
+      update: {},
+      create: {
         email: 'customer2@gmail.com',
         name: 'สมหญิง สวยงาม',
         phone: '082-222-2222',

@@ -2,8 +2,8 @@ import type { NextConfig } from "next";
 import withPWA from 'next-pwa';
 
 const nextConfig: NextConfig = {
-  // Enable standalone output for Docker only
-  ...(process.env.DOCKER_BUILD === 'true' && { output: 'standalone' }),
+  // Temporarily disable standalone output for Docker to fix build issues
+  // ...(process.env.DOCKER_BUILD === 'true' && { output: 'standalone' }),
   
   // PWA configuration
   experimental: {
@@ -84,7 +84,7 @@ export default withPWA({
   dest: 'public',
   register: true,
   skipWaiting: true,
-  disable: false, // Enable PWA in both dev and production
+  disable: process.env.NODE_ENV === 'development', // Disable in dev, enable in production
   runtimeCaching: [
     {
       urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,

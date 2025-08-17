@@ -9,6 +9,11 @@ export function PWAServiceWorker() {
     // Only log in development
     const isDev = process.env.NODE_ENV === 'development'
     
+    // In production, let next-pwa handle service worker registration
+    if (!isDev) {
+      return
+    }
+    
     // Safety check for client-side only
     if (typeof window === 'undefined') {
       if (isDev) console.log('PWAServiceWorker: Server-side, skipping')
@@ -26,7 +31,7 @@ export function PWAServiceWorker() {
       console.log('PWAServiceWorker: serviceWorker supported: true')
     }
 
-    // Simple service worker registration without workbox
+    // Simple service worker registration for development only
     const registerSW = async () => {
       try {
         if (isDev) console.log('PWAServiceWorker: Starting registration')
