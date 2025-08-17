@@ -7,7 +7,7 @@ import { Button, Input, Modal, Label, Card, CardHeader, CardTitle, CardContent }
 export default function TestUIPage() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedTab, setSelectedTab] = useState("components")
-  const [notifications, setNotifications] = useState([
+  const [notifications] = useState([
     { id: 1, title: "New booking", message: "คุณมีการจองใหม่", time: "2 นาทีที่แล้ว", type: "info" },
     { id: 2, title: "Payment received", message: "ได้รับการชำระเงินแล้ว", time: "5 นาทีที่แล้ว", type: "success" },
     { id: 3, title: "System maintenance", message: "ระบบจะปิดปรับปรุงในคืนนี้", time: "1 ชั่วโมงที่แล้ว", type: "warning" },

@@ -2,12 +2,7 @@
 
 import { useEffect } from 'react'
 
-// Extend Window interface for workbox
-declare global {
-  interface Window {
-    workbox?: any
-  }
-}
+// Remove workbox type declaration since we're not using it
 
 export function PWAServiceWorker() {
   useEffect(() => {
