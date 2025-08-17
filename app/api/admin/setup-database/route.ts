@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { execSync } from 'child_process'
 import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 
@@ -9,6 +10,32 @@ export async function POST() {
     // Connect to database
     await prisma.$connect()
     console.log('✅ Database connected')
+    
+    // Run migrations first to ensure schema is up to date
+    console.log('🔄 Running database migrations...')
+    try {
+      execSync('npx prisma migrate deploy', { 
+        stdio: 'inherit',
+        env: { ...process.env }
+      })
+      console.log('✅ Migrations completed')
+    } catch (migrationError: any) {
+      console.warn('⚠️ Migration warning:', migrationError.message)
+      // Continue anyway - migrations might already be applied
+    }
+    
+    // Generate Prisma client
+    console.log('🔄 Generating Prisma client...')
+    try {
+      execSync('npx prisma generate', { 
+        stdio: 'inherit',
+        env: { ...process.env }
+      })
+      console.log('✅ Prisma client generated')
+    } catch (generateError: any) {
+      console.warn('⚠️ Generate warning:', generateError.message)
+      // Continue anyway - client might already be generated
+    }
     
     // Clear existing data (in correct order)
     await prisma.booking.deleteMany()
