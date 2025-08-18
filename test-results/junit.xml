@@ -1,0 +1,16 @@
+<testsuites id="" name="" tests="6" failures="0" skipped="0" errors="0" time="1.867875">
+<testsuite name="basic.spec.ts" timestamp="2025-08-18T14:08:45.445Z" hostname="chromium" tests="6" failures="0" skipped="0" time="5.198" errors="0">
+<testcase name="Basic Application Tests › homepage loads successfully" classname="basic.spec.ts" time="1.195">
+</testcase>
+<testcase name="Basic Application Tests › signin page loads successfully" classname="basic.spec.ts" time="1.214">
+</testcase>
+<testcase name="Basic Application Tests › signup page loads successfully" classname="basic.spec.ts" time="1.194">
+</testcase>
+<testcase name="Basic Application Tests › PWA manifest is accessible" classname="basic.spec.ts" time="0.18">
+</testcase>
+<testcase name="Basic Application Tests › health check endpoints work" classname="basic.spec.ts" time="0.192">
+</testcase>
+<testcase name="Basic Application Tests › OAuth providers are configured on signin page" classname="basic.spec.ts" time="1.223">
+</testcase>
+</testsuite>
+</testsuites>
