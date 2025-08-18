@@ -1,19 +1,16 @@
 const config = {
   require: [
-    'tests/step-definitions/**/*.ts',
-    'tests/support/**/*.ts'
+    'tests/support/hooks.ts',
+    'tests/step-definitions/**/*.ts'
   ],
   requireModule: ['ts-node/register'],
   format: [
-    'progress-bar',
-    'html:test-results/cucumber-report.html',
-    'json:test-results/cucumber-report.json'
+    'progress-bar'
   ],
   formatOptions: {
     snippetInterface: 'async-await'
   },
-  publishQuiet: true,
-  parallel: 2
+  publishQuiet: true
 };
 
 module.exports = {

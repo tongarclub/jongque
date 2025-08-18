@@ -9,6 +9,11 @@ Given('I am on the homepage', async function (this: World) {
   await this.homePage.goToHome();
 });
 
+Given('I visit the homepage', async function (this: World) {
+  this.homePage = new HomePage(this.page);
+  await this.homePage.goToHome();
+});
+
 Given('I am on the registration page', async function (this: World) {
   this.authPage = new AuthPage(this.page);
   await this.authPage.goToSignUp();
