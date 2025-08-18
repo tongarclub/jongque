@@ -158,9 +158,63 @@ For OAuth integration (Task 2.2), the following will be needed:
   - [ ] 7.7 Build payment analytics and revenue tracking
   - [ ] 7.8 Create subscription cancellation and refund handling
 
+- [ ] 8.0 Automated Testing with Playwright BDD
+  - [x] 8.1 Setup Playwright testing framework with TypeScript
+  - [x] 8.2 Configure BDD framework (Cucumber-js integration)
+  - [x] 8.3 Create test structure and page object models
+  - [x] 8.4 Write authentication flow test scenarios
+    - [x] 8.4.1 User registration and login (credentials)
+    - [x] 8.4.2 OAuth flows (Google, Facebook, LINE)
+    - [ ] 8.4.3 Password reset and email verification
+    - [ ] 8.4.4 Role-based access control testing
+  - [ ] 8.5 Create queue booking system test scenarios
+    - [ ] 8.5.1 Customer booking flow end-to-end
+    - [ ] 8.5.2 Business owner queue management
+    - [ ] 8.5.3 Real-time updates and notifications
+    - [ ] 8.5.4 Booking cancellation and modification
+  - [x] 8.6 PWA and mobile testing scenarios
+    - [x] 8.6.1 PWA installation and offline functionality
+    - [x] 8.6.2 Service Worker caching strategies
+    - [x] 8.6.3 Mobile responsive design testing
+    - [ ] 8.6.4 Push notification testing
+  - [ ] 8.7 API testing and integration tests
+    - [ ] 8.7.1 REST API endpoint testing
+    - [ ] 8.7.2 Database integration testing
+    - [ ] 8.7.3 Third-party service integration (LINE, email)
+    - [ ] 8.7.4 Payment gateway testing (mock/sandbox)
+  - [ ] 8.8 Performance and load testing
+    - [ ] 8.8.1 Page load performance testing
+    - [ ] 8.8.2 Database query performance
+    - [ ] 8.8.3 Concurrent user booking scenarios
+    - [ ] 8.8.4 Memory leak and resource usage testing
+  - [ ] 8.9 Cross-browser and device testing
+    - [ ] 8.9.1 Multi-browser compatibility (Chrome, Firefox, Safari)
+    - [ ] 8.9.2 Mobile device testing (iOS, Android)
+    - [ ] 8.9.3 Accessibility testing (WCAG compliance)
+    - [ ] 8.9.4 Thai language and localization testing
+  - [x] 8.10 CI/CD integration and automated testing pipeline
+    - [x] 8.10.1 GitHub Actions workflow setup
+    - [x] 8.10.2 Test environment provisioning
+    - [x] 8.10.3 Test reporting and notifications
+    - [ ] 8.10.4 Performance regression detection
+
 ## Recent Progress Summary
 
 ### ✅ Completed Tasks (Latest Updates)
+
+**Automated Testing with Playwright BDD (2025-08-16):**
+- ✅ **NEW:** Setup Playwright testing framework with TypeScript configuration
+- ✅ **NEW:** Integrated BDD framework using Cucumber-js for behavior-driven testing
+- ✅ **NEW:** Created comprehensive test structure with Page Object Model pattern
+- ✅ **NEW:** Implemented authentication flow test scenarios (login, registration, OAuth)
+- ✅ **NEW:** Added PWA testing scenarios (installation, offline functionality, service worker)
+- ✅ **NEW:** Setup GitHub Actions workflow for automated CI/CD testing
+- ✅ **NEW:** Created testing utilities and helper scripts for different test types
+- ✅ **NEW:** Added cross-browser testing support (Chrome, Firefox, Safari, Mobile)
+- ✅ **NEW:** Implemented test reporting with HTML, JSON, and JUnit formats
+- ✅ **NEW:** Created comprehensive Testing Guide documentation
+- ✅ **NEW:** Added npm scripts for various testing scenarios (test, test:ui, test:bdd)
+- ✅ **NEW:** Setup test environment with database and Redis integration
 
 **PWA Enhancement & UI Improvements (2025-08-16):**
 - ✅ Created PWAInstallButton component with smart installation detection
