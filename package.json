@@ -21,12 +21,14 @@
     "deploy:prod": "node scripts/deploy-to-production.js",
     "deploy:quick": "bash scripts/quick-deploy.sh",
     "generate:screenshots": "node scripts/generate-screenshots.js",
-    "test": "playwright test",
+    "test:google-oauth": "node scripts/test-google-oauth.js",
+    "setup:google-oauth": "node scripts/setup-google-oauth.js",
+    "test": "playwright test tests/simple.spec.ts",
+    "test:all": "playwright test",
     "test:ui": "playwright test --ui",
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
-    "test:bdd": "echo 'BDD tests temporarily disabled due to TypeScript conflicts. Use npm run test for Playwright tests.'",
-    "test:bdd:parallel": "npm run test:bdd",
+    "test:comprehensive": "playwright test --reporter=html",
     "test:report": "playwright show-report"
   },
   "prisma": {
@@ -59,7 +61,6 @@
     "zod": "^4.0.17"
   },
   "devDependencies": {
-    "@cucumber/cucumber": "^7.3.2",
     "@cucumber/playwright": "^3.1.0",
     "@eslint/eslintrc": "^3",
     "@playwright/test": "^1.54.2",

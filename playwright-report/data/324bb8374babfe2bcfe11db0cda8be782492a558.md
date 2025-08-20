@@ -1,0 +1,50 @@
+# Page snapshot
+
+```yaml
+- main:
+  - img "Next.js logo"
+  - heading "🎉 ยินดีต้อนรับสู่ JongQue" [level=1]
+  - paragraph: ระบบจองคิวออนไลน์ที่ครบครันสำหรับร้านเสริมสวย คลินิก ฟิตเนส และร้านอาหาร
+  - list:
+    - listitem:
+      - text: "✅ Feature 1.4:"
+      - strong: NextAuth.js Authentication
+      - text: "- ระบบการเข้าสู่ระบบ"
+    - listitem:
+      - text: "✅ Feature 1.5:"
+      - strong: Redis Cache & Session
+      - text: "- ระบบ caching และ session"
+    - listitem:
+      - text: "✅ Feature 1.6:"
+      - strong: PWA (Progressive Web App)
+      - text: "- ติดตั้งเป็นแอปได้"
+    - listitem: 🚧 พร้อมสำหรับการพัฒนาต่อ - Core Queue Booking System
+  - heading "📱 ติดตั้งแอป JongQue" [level=3]
+  - paragraph: ติดตั้งเป็นแอปบนหน้าจอหลักเพื่อประสบการณ์ที่ดีขึ้น
+  - button "📱 ทดสอบ PWA"
+  - paragraph: เปิดใน Chrome หรือ Safari บนมือถือเพื่อติดตั้ง
+  - text: ✨ ใช้งานแบบ offline ได้ 🚀 เปิดเร็วด้วย cache 📱 เหมือน native app
+  - heading "🧪 หน้าทดสอบระบบ" [level=3]
+  - link "🔐 Authentication":
+    - /url: /test-auth
+  - link "🚀 Redis Cache":
+    - /url: /test-redis
+  - link "🎨 UI Components":
+    - /url: /test-ui
+  - link "📱 PWA Test":
+    - /url: /test-pwa
+  - link "🔍 Google OAuth":
+    - /url: /test-google-oauth
+  - link "🏥 System Health":
+    - /url: /api/health
+  - link "📚 Next.js Docs":
+    - /url: https://nextjs.org/docs
+- contentinfo:
+  - link "Learn":
+    - /url: https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app
+  - link "Examples":
+    - /url: https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app
+  - link "Go to nextjs.org →":
+    - /url: https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app
+- alert
+```

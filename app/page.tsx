@@ -89,6 +89,13 @@ export default function Home() {
               <span className="text-xl">📱</span>
               <span>PWA Test</span>
             </a>
+            <a
+              className="rounded-lg border border-solid border-red-200 dark:border-red-600 transition-colors flex flex-col items-center justify-center bg-red-50 dark:bg-red-900 text-red-700 dark:text-red-300 gap-2 hover:bg-red-100 dark:hover:bg-red-800 font-medium text-sm h-20 px-4"
+              href="/test-google-oauth"
+            >
+              <span className="text-xl">🔍</span>
+              <span>Google OAuth</span>
+            </a>
           </div>
         </div>
 

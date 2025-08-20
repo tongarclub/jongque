@@ -1,0 +1,50 @@
+# Page snapshot
+
+```yaml
+- heading "📱 PWA Test Page" [level=1]
+- paragraph: ทดสอบ Progressive Web App functionality
+- heading "สถานะ PWA" [level=3]
+- text: 📱
+- heading "App Installation" [level=3]
+- paragraph: ยังไม่ได้ติดตั้ง
+- text: ⚙️
+- heading "Service Worker" [level=3]
+- paragraph: ลงทะเบียนแล้ว
+- text: 📋
+- heading "Web App Manifest" [level=3]
+- paragraph: โหลดแล้ว
+- text: 🌐
+- heading "Network Status" [level=3]
+- paragraph: ออนไลน์
+- heading "การติดตั้ง PWA" [level=3]
+- paragraph: ⚠️ แอปยังไม่พร้อมสำหรับการติดตั้ง หรือได้ถูกติดตั้งไปแล้ว
+- paragraph: ลองเปิดใน Chrome หรือ Safari บนมือถือ หรือ Chrome บนเดสก์ท็อป
+- heading "ทดสอบฟีเจอร์ PWA" [level=3]
+- button "🔌 ทดสอบ Offline Mode"
+- button "🗑️ ล้าง Cache"
+- button "🔄 รีโหลดหน้า"
+- button "⚙️ อัพเดต Service Worker"
+- heading "ข้อมูล PWA" [level=3]
+- strong: "User Agent:"
+- paragraph: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.7258.5 Safari/537.36
+- strong: "Display Mode:"
+- paragraph: Browser
+- strong: "Screen Size:"
+- paragraph: 1280 x 720
+- strong: "Viewport:"
+- paragraph: 1280 x 720
+- heading "เมนูทดสอบอื่นๆ" [level=3]
+- link "🔐 Authentication Test":
+  - /url: /test-auth
+  - button "🔐 Authentication Test"
+- link "🎨 UI Components":
+  - /url: /test-ui
+  - button "🎨 UI Components"
+- link "🚀 Redis Cache Test":
+  - /url: /test-redis
+  - button "🚀 Redis Cache Test"
+- link "🏠 หน้าหลัก":
+  - /url: /
+  - button "🏠 หน้าหลัก"
+- alert
+```
