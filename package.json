@@ -22,6 +22,8 @@
     "deploy:quick": "bash scripts/quick-deploy.sh",
     "generate:screenshots": "node scripts/generate-screenshots.js",
     "test:google-oauth": "node scripts/test-google-oauth.js",
+    "test:facebook-oauth": "node scripts/test-facebook-oauth.js",
+    "test:line-oauth": "node scripts/test-line-oauth.js",
     "setup:google-oauth": "node scripts/setup-google-oauth.js",
     "test": "playwright test tests/simple.spec.ts",
     "test:all": "playwright test",

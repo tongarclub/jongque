@@ -60,7 +60,7 @@ export default function Home() {
 
         <div className="w-full max-w-2xl bg-gray-50 dark:bg-gray-800 rounded-lg p-6 mb-6">
           <h3 className="text-lg font-semibold mb-4 text-center">🧪 หน้าทดสอบระบบ</h3>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             <a
               className="rounded-lg border border-solid border-transparent transition-colors flex flex-col items-center justify-center bg-blue-600 text-white gap-2 hover:bg-blue-700 font-medium text-sm h-20 px-4"
               href="/test-auth"
@@ -95,6 +95,20 @@ export default function Home() {
             >
               <span className="text-xl">🔍</span>
               <span>Google OAuth</span>
+            </a>
+            <a
+              className="rounded-lg border border-solid border-blue-200 dark:border-blue-600 transition-colors flex flex-col items-center justify-center bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-blue-300 gap-2 hover:bg-blue-100 dark:hover:bg-blue-800 font-medium text-sm h-20 px-4"
+              href="/test-facebook-oauth"
+            >
+              <span className="text-xl">📘</span>
+              <span>Facebook OAuth</span>
+            </a>
+            <a
+              className="rounded-lg border border-solid border-green-200 dark:border-green-600 transition-colors flex flex-col items-center justify-center bg-green-50 dark:bg-green-900 text-green-700 dark:text-green-300 gap-2 hover:bg-green-100 dark:hover:bg-green-800 font-medium text-sm h-20 px-4"
+              href="/test-line-oauth"
+            >
+              <span className="text-xl">💬</span>
+              <span>LINE Login</span>
             </a>
           </div>
         </div>
