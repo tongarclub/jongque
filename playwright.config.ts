@@ -77,10 +77,12 @@ export default defineConfig({
     command: 'npm run dev',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
+    timeout: 120_000, // 2 minutes timeout
     env: {
       NEXTAUTH_URL: 'http://localhost:3000',
       NEXTAUTH_SECRET: 'uBrMHkwMnTYMyTQsOXpEhxWd32RekpxJWnN50ORAh6M=',
-      DATABASE_URL: 'postgresql://jongque_user:jongque_pass@localhost:5432/jongque_db'
+      DATABASE_URL: 'postgresql://jongque_user:jongque_pass@localhost:5432/jongque_db',
+      NODE_ENV: 'test'
     }
   },
 });
