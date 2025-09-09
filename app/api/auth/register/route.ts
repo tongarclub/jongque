@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { UserRole } from "@prisma/client"
 import { z } from "zod"
 import bcrypt from "bcryptjs"
+import { sendEmailVerification } from "@/lib/notifications/email"
 
 const registerSchema = z.object({
   name: z.string().min(2, "ชื่อต้องมีอย่างน้อย 2 ตัวอักษร"),
@@ -66,13 +67,24 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    // TODO: Send verification email
-    console.log("New user registered:", user.email)
+    // Send verification email
+    try {
+      const emailSent = await sendEmailVerification(user.email!, user.name || undefined);
+      
+      if (emailSent) {
+        console.log("Verification email sent to:", user.email);
+      } else {
+        console.error("Failed to send verification email to:", user.email);
+      }
+    } catch (emailError) {
+      console.error("Error sending verification email:", emailError);
+      // Don't fail registration if email fails
+    }
 
     return NextResponse.json(
       {
         success: true,
-        message: "สมัครสมาชิกสำเร็จ กรุณาตรวจสอบอีเมลเพื่อยืนยันบัญชี",
+        message: "สมัครสมาชิกสำเร็จ เราได้ส่งอีเมลยืนยันไปที่อีเมลของคุณแล้ว กรุณาตรวจสอบและยืนยันก่อนเข้าใช้งาน",
         user,
       },
       { status: 201 }

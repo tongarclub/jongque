@@ -97,7 +97,15 @@ function SignInContent() {
               </div>
               
               <div>
-                <Label htmlFor="password">รหัสผ่าน</Label>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="password">รหัสผ่าน</Label>
+                  <Link 
+                    href="/auth/forgot-password" 
+                    className="text-sm text-blue-600 hover:text-blue-500"
+                  >
+                    ลืมรหัสผ่าน?
+                  </Link>
+                </div>
                 <Input
                   id="password"
                   type="password"
