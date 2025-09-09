@@ -7,9 +7,10 @@ interface ModalProps {
   children: React.ReactNode
   title?: string
   size?: "sm" | "md" | "lg" | "xl"
+  className?: string
 }
 
-export function Modal({ isOpen, onClose, children, title, size = "md" }: ModalProps) {
+export function Modal({ isOpen, onClose, children, title, size = "md", className }: ModalProps) {
   React.useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -44,7 +45,8 @@ export function Modal({ isOpen, onClose, children, title, size = "md" }: ModalPr
             "w-full max-w-md": size === "md", 
             "w-full max-w-lg": size === "lg",
             "w-full max-w-4xl": size === "xl",
-          }
+          },
+          className
         )}
       >
         {title && (

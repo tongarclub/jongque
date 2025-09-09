@@ -19,7 +19,8 @@ model User {
   image     String?
   password  String?  // For credentials authentication
   role      UserRole @default(CUSTOMER)
-  isVerified Boolean @default(false)
+  isVerified Boolean @default(false) // Email verification
+  isPhoneVerified Boolean @default(false) // Phone verification
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -73,6 +74,22 @@ model VerificationToken {
 
   @@unique([identifier, token])
   @@map("verification_tokens")
+}
+
+model OtpVerification {
+  id          String   @id @default(cuid())
+  phone       String
+  otpCode     String
+  attempts    Int      @default(0)
+  isVerified  Boolean  @default(false)
+  isUsed      Boolean  @default(false)
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([phone])
+  @@index([otpCode])
+  @@map("otp_verifications")
 }
 
 // Business Management

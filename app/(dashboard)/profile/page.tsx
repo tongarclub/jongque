@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import { PhoneVerificationModal } from '@/components/PhoneVerificationModal';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
@@ -31,6 +32,7 @@ interface UserProfile {
   image: string | null;
   role: string;
   isVerified: boolean;
+  isPhoneVerified: boolean;
   createdAt: string;
 }
 
@@ -41,6 +43,7 @@ export default function ProfilePage() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
+  const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -176,6 +179,23 @@ export default function ProfilePage() {
       month: 'long',
       day: 'numeric',
     });
+  };
+
+  const handlePhoneVerificationSuccess = (verifiedPhone: string) => {
+    // Update profile state
+    setProfile(prev => prev ? { 
+      ...prev, 
+      phone: verifiedPhone,
+      isPhoneVerified: true 
+    } : null);
+    
+    // Update form data if editing
+    if (isEditing) {
+      setFormData(prev => ({ ...prev, phone: verifiedPhone }));
+    }
+    
+    setSuccess('ยืนยันเบอร์โทรศัพท์สำเร็จ!');
+    setTimeout(() => setSuccess(''), 3000);
   };
 
   if (status === 'loading' || isLoading) {
@@ -340,20 +360,57 @@ export default function ProfilePage() {
                   <Label htmlFor="phone">
                     <Phone className="h-4 w-4 inline mr-2" />
                     เบอร์โทรศัพท์
+                    {profile?.phone && (
+                      profile?.isPhoneVerified ? (
+                        <span className="ml-2 text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
+                          ✓ ยืนยันแล้ว
+                        </span>
+                      ) : (
+                        <span className="ml-2 text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
+                          ! รอการยืนยัน
+                        </span>
+                      )
+                    )}
                   </Label>
                   {isEditing ? (
-                    <Input
-                      id="phone"
-                      type="tel"
-                      value={formData.phone}
-                      onChange={(e) => handleInputChange('phone', e.target.value)}
-                      placeholder="กรอกเบอร์โทรศัพท์"
-                      disabled={isSaving}
-                    />
+                    <div className="space-y-2">
+                      <Input
+                        id="phone"
+                        type="tel"
+                        value={formData.phone}
+                        onChange={(e) => handleInputChange('phone', e.target.value)}
+                        placeholder="กรอกเบอร์โทรศัพท์"
+                        disabled={isSaving}
+                      />
+                    </div>
                   ) : (
-                    <p className="text-gray-900 p-2 bg-gray-50 rounded">
-                      {profile?.phone || 'ยังไม่ได้กรอก'}
-                    </p>
+                    <div className="space-y-2">
+                      <p className="text-gray-900 p-2 bg-gray-50 rounded">
+                        {profile?.phone || 'ยังไม่ได้กรอก'}
+                      </p>
+                      {profile?.phone && !profile?.isPhoneVerified && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setIsPhoneModalOpen(true)}
+                          className="text-blue-600 border-blue-200 hover:bg-blue-50"
+                        >
+                          <Phone className="h-4 w-4 mr-2" />
+                          ยืนยันเบอร์โทร
+                        </Button>
+                      )}
+                      {!profile?.phone && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setIsPhoneModalOpen(true)}
+                          className="text-blue-600 border-blue-200 hover:bg-blue-50"
+                        >
+                          <Phone className="h-4 w-4 mr-2" />
+                          เพิ่มเบอร์โทร
+                        </Button>
+                      )}
+                    </div>
                   )}
                 </div>
 
@@ -414,6 +471,14 @@ export default function ProfilePage() {
           </Link>
         </div>
       </div>
+
+      {/* Phone Verification Modal */}
+      <PhoneVerificationModal
+        isOpen={isPhoneModalOpen}
+        onClose={() => setIsPhoneModalOpen(false)}
+        onSuccess={handlePhoneVerificationSuccess}
+        currentPhone={profile?.phone || ''}
+      />
     </div>
   );
 }
