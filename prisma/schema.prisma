@@ -223,6 +223,8 @@ model Booking {
   customerName  String?       // For guest bookings
   customerPhone String?       // For guest bookings
   customerEmail String?       // For guest bookings
+  isGuestBooking Boolean      @default(false) // Identify guest bookings
+  guestLookupToken String?    @unique // Token for guest booking lookup
   cancellationReason String?
   cancellationFee Decimal?    @db.Decimal(10, 2)
   createdAt     DateTime      @default(now())
