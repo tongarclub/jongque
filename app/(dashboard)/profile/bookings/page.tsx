@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -47,7 +47,7 @@ interface Booking {
 }
 
 export default function BookingHistoryPage() {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const router = useRouter();
   
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -58,7 +58,7 @@ export default function BookingHistoryPage() {
   const [searchTerm, setSearchTerm] = useState('');
 
   // Mock data for demonstration (replace with actual API call)
-  const mockBookings: Booking[] = [
+  const mockBookings: Booking[] = useMemo(() => [
     {
       id: '1',
       bookingNumber: 'BK001',
@@ -119,7 +119,7 @@ export default function BookingHistoryPage() {
       },
       createdAt: '2024-01-08T12:00:00Z'
     }
-  ];
+  ], []);
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -129,19 +129,7 @@ export default function BookingHistoryPage() {
     }
   }, [status, router]);
 
-  // Load booking history
-  useEffect(() => {
-    if (status === 'authenticated') {
-      loadBookingHistory();
-    }
-  }, [status]);
-
-  // Filter bookings when status or search changes
-  useEffect(() => {
-    filterBookings();
-  }, [bookings, filterStatus, searchTerm]);
-
-  const loadBookingHistory = async () => {
+  const loadBookingHistory = useCallback(async () => {
     try {
       setIsLoading(true);
       // For now, use mock data
@@ -159,9 +147,10 @@ export default function BookingHistoryPage() {
       setError('ไม่สามารถโหลดประวัติการจองได้');
       setIsLoading(false);
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const filterBookings = () => {
+  const filterBookings = useCallback(() => {
     let filtered = bookings;
 
     // Filter by status
@@ -183,7 +172,19 @@ export default function BookingHistoryPage() {
     filtered.sort((a, b) => new Date(b.bookingDate).getTime() - new Date(a.bookingDate).getTime());
 
     setFilteredBookings(filtered);
-  };
+  }, [bookings, filterStatus, searchTerm]);
+
+  // Load booking history
+  useEffect(() => {
+    if (status === 'authenticated') {
+      loadBookingHistory();
+    }
+  }, [status, loadBookingHistory]);
+
+  // Filter bookings when status or search changes
+  useEffect(() => {
+    filterBookings();
+  }, [bookings, filterStatus, searchTerm, filterBookings]);
 
   const getStatusDisplay = (status: string) => {
     const statusMap = {

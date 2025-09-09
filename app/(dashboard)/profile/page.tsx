@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
@@ -209,9 +210,11 @@ export default function ProfilePage() {
               <div className="relative">
                 <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
                   {profile?.image ? (
-                    <img 
+                    <Image 
                       src={profile.image} 
                       alt="Profile" 
+                      width={128}
+                      height={128}
                       className="w-full h-full object-cover"
                     />
                   ) : (

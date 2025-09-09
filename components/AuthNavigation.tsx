@@ -2,6 +2,7 @@
 
 import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/Button';
 import { User, Settings, LogOut, Calendar, Shield } from 'lucide-react';
 import { useState } from 'react';
@@ -53,9 +54,11 @@ export function AuthNavigation() {
         >
           <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden">
             {session.user?.image ? (
-              <img 
+              <Image 
                 src={session.user.image} 
                 alt="Profile" 
+                width={32}
+                height={32}
                 className="w-full h-full object-cover"
               />
             ) : (

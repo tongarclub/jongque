@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 const createTransporter = () => {
   if (process.env.NODE_ENV === 'production') {
     // Production email service (e.g., SendGrid, AWS SES, etc.)
-    return nodemailer.createTransporter({
+    return nodemailer.createTransport({
       host: process.env.SMTP_HOST || 'smtp.sendgrid.net',
       port: parseInt(process.env.SMTP_PORT || '587'),
       secure: false,
@@ -19,7 +19,7 @@ const createTransporter = () => {
     });
   } else {
     // Development: Use Ethereal Email or Gmail
-    return nodemailer.createTransporter({
+    return nodemailer.createTransport({
       host: 'smtp.ethereal.email',
       port: 587,
       secure: false,

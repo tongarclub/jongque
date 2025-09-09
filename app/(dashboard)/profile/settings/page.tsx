@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
-import { Label } from '@/components/ui/Label';
 import { 
   Bell, 
   Mail, 
@@ -16,7 +15,6 @@ import {
   Save,
   Loader2,
   Eye,
-  EyeOff,
   AlertTriangle
 } from 'lucide-react';
 
@@ -36,7 +34,7 @@ interface UserSettings {
 }
 
 export default function SettingsPage() {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const router = useRouter();
   
   const [settings, setSettings] = useState<UserSettings>({

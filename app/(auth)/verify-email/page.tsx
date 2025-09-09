@@ -1,13 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { CheckCircle, XCircle, Mail, Loader2 } from 'lucide-react';
 
-export default function VerifyEmailPage() {
+function VerifyEmailContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
@@ -18,21 +18,7 @@ export default function VerifyEmailPage() {
   const token = searchParams.get('token');
   const emailParam = searchParams.get('email');
 
-  useEffect(() => {
-    if (emailParam) {
-      setEmail(emailParam);
-    }
-
-    if (token && emailParam) {
-      verifyEmail(token, emailParam);
-    } else {
-      // No token provided, show manual verification form
-      setStatus('error');
-      setMessage('ลิงก์ยืนยันไม่ครบถ้วน กรุณาตรวจสอบอีเมลของคุณอีกครั้ง');
-    }
-  }, [token, emailParam]);
-
-  const verifyEmail = async (token: string, email: string) => {
+  const verifyEmail = useCallback(async (token: string, email: string) => {
     try {
       const response = await fetch('/api/auth/verify-email', {
         method: 'POST',
@@ -61,7 +47,21 @@ export default function VerifyEmailPage() {
       setStatus('error');
       setMessage('เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองอีกครั้ง');
     }
-  };
+  }, [router]);
+
+  useEffect(() => {
+    if (emailParam) {
+      setEmail(emailParam);
+    }
+
+    if (token && emailParam) {
+      verifyEmail(token, emailParam);
+    } else {
+      // No token provided, show manual verification form
+      setStatus('error');
+      setMessage('ลิงก์ยืนยันไม่ครบถ้วน กรุณาตรวจสอบอีเมลของคุณอีกครั้ง');
+    }
+  }, [token, emailParam, verifyEmail]);
 
   const resendVerification = async () => {
     if (!email || isResending) return;
@@ -180,5 +180,20 @@ export default function VerifyEmailPage() {
         </div>
       </Card>
     </div>
+  );
+}
+
+export default function VerifyEmailPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="mx-auto h-8 w-8 text-blue-600 animate-spin mb-4" />
+          <p className="text-gray-600">กำลังโหลด...</p>
+        </div>
+      </div>
+    }>
+      <VerifyEmailContent />
+    </Suspense>
   );
 }

@@ -69,8 +69,8 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Alternative endpoint for authenticated users to resend verification
-export async function GET(request: NextRequest) {
+// Alternative endpoint for authenticated users to resend verification  
+export async function GET() {
   try {
     const session = await getServerSession(authOptions);
     
