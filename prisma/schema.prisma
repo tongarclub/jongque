@@ -30,6 +30,7 @@ model User {
 
   // Customer relationships
   bookings  Booking[]
+  waitlist  Waitlist[]
   
   // Business owner relationships
   business  Business?
@@ -121,6 +122,7 @@ model Business {
   bookings    Booking[]
   operatingHours OperatingHours[]
   blackoutDates BlackoutDate[]
+  waitlist    Waitlist[]
   subscription Subscription?
 
   @@map("businesses")
@@ -140,6 +142,7 @@ model Service {
   businessId  String
   business    Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
   bookings    Booking[]
+  waitlist    Waitlist[]
 
   @@map("services")
 }
@@ -158,6 +161,7 @@ model Staff {
   businessId String
   business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
   bookings   Booking[]
+  waitlist   Waitlist[]
   availability StaffAvailability[]
 
   @@map("staff")
@@ -260,6 +264,32 @@ model BookingNotification {
   @@map("booking_notifications")
 }
 
+// Waitlist System
+model Waitlist {
+  id          String       @id @default(cuid())
+  position    Int          // Position in waitlist
+  status      WaitlistStatus @default(WAITING)
+  bookingDate DateTime     @db.Date
+  bookingTime String       // HH:MM format
+  notes       String?
+  leftAt      DateTime?    // When user left the waitlist
+  promotedAt  DateTime?    // When promoted to actual booking
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  // Relationships
+  customerId  String
+  customer    User     @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  businessId  String
+  business    Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  serviceId   String
+  service     Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  staffId     String?
+  staff       Staff?   @relation(fields: [staffId], references: [id], onDelete: SetNull)
+  
+  @@map("waitlist")
+}
+
 // Subscription Management
 model Subscription {
   id                String             @id @default(cuid())
@@ -359,4 +389,11 @@ enum PaymentStatus {
   SUCCEEDED
   FAILED
   REFUNDED
+}
+
+enum WaitlistStatus {
+  WAITING
+  PROMOTED     // Promoted to actual booking
+  CANCELLED    // User left waitlist
+  EXPIRED      // Time slot passed
 }
