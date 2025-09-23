@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
@@ -31,7 +31,7 @@ interface QueueStatus {
   lastUpdated: string;
 }
 
-export default function QueueStatusPage() {
+function QueueStatusContent() {
   const searchParams = useSearchParams();
   const [businessId, setBusinessId] = useState(searchParams.get('businessId') || '');
   const [selectedDate, setSelectedDate] = useState(() => {
@@ -43,29 +43,7 @@ export default function QueueStatusPage() {
   const [autoRefresh, setAutoRefresh] = useState(true);
   const [lastRefresh, setLastRefresh] = useState<Date | null>(null);
 
-  // Auto-refresh every 30 seconds
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-    
-    if (autoRefresh && businessId) {
-      interval = setInterval(() => {
-        fetchQueueStatus();
-      }, 30000);
-    }
-    
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [autoRefresh, businessId, selectedDate]);
-
-  // Load queue status when parameters change
-  useEffect(() => {
-    if (businessId) {
-      fetchQueueStatus();
-    }
-  }, [businessId, selectedDate]);
-
-  const fetchQueueStatus = async () => {
+  const fetchQueueStatus = useCallback(async () => {
     if (!businessId) return;
     
     try {
@@ -92,7 +70,29 @@ export default function QueueStatusPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [businessId, selectedDate]);
+
+  // Auto-refresh every 30 seconds
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    
+    if (autoRefresh && businessId) {
+      interval = setInterval(() => {
+        fetchQueueStatus();
+      }, 30000);
+    }
+    
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [autoRefresh, businessId, selectedDate, fetchQueueStatus]);
+
+  // Load queue status when parameters change
+  useEffect(() => {
+    if (businessId) {
+      fetchQueueStatus();
+    }
+  }, [businessId, selectedDate, fetchQueueStatus]);
 
   const getStatusBadge = (status: string) => {
     const statusMap: { [key: string]: { text: string; color: string } } = {
@@ -397,5 +397,20 @@ export default function QueueStatusPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function QueueStatusPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">กำลังโหลด...</p>
+        </div>
+      </div>
+    }>
+      <QueueStatusContent />
+    </Suspense>
   );
 }

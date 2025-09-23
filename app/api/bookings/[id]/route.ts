@@ -247,7 +247,7 @@ export async function PUT(
       return NextResponse.json(
         {
           success: false,
-          message: error.errors[0].message,
+          message: error.issues[0].message,
         },
         { status: 400 }
       );
@@ -350,7 +350,7 @@ export async function DELETE(
       return NextResponse.json(
         {
           success: false,
-          message: error.errors[0].message,
+          message: error.issues[0].message,
         },
         { status: 400 }
       );

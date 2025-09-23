@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
@@ -77,18 +77,6 @@ export default function BookingPage() {
     }
   }, [status, router]);
 
-  // Load businesses
-  useEffect(() => {
-    loadBusinesses();
-  }, []);
-
-  // Load available time slots when business, service, staff, and date are selected
-  useEffect(() => {
-    if (selectedBusiness && selectedService && selectedDate) {
-      loadAvailableSlots();
-    }
-  }, [selectedBusiness, selectedService, selectedStaff, selectedDate]);
-
   const loadBusinesses = async () => {
     try {
       setLoading(true);
@@ -104,7 +92,7 @@ export default function BookingPage() {
     }
   };
 
-  const loadAvailableSlots = async () => {
+  const loadAvailableSlots = useCallback(async () => {
     if (!selectedBusiness || !selectedService || !selectedDate) return;
 
     try {
@@ -126,7 +114,19 @@ export default function BookingPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedBusiness, selectedService, selectedDate, selectedStaff]);
+
+  // Load businesses
+  useEffect(() => {
+    loadBusinesses();
+  }, []);
+
+  // Load available time slots when business, service, staff, and date are selected
+  useEffect(() => {
+    if (selectedBusiness && selectedService && selectedDate) {
+      loadAvailableSlots();
+    }
+  }, [selectedBusiness, selectedService, selectedStaff, selectedDate, loadAvailableSlots]);
 
   const handleBusinessSelect = (business: Business) => {
     setSelectedBusiness(business);
@@ -503,7 +503,7 @@ export default function BookingPage() {
                     </div>
                   </div>
                   
-                  {selectedBusiness.staff.filter(s => s.isActive).map((staff) => (
+                  {selectedBusiness?.staff.filter(s => s.isActive).map((staff) => (
                     <div
                       key={staff.id}
                       onClick={() => handleStaffSelect(staff)}

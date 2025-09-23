@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/Card";
@@ -80,18 +80,6 @@ export default function MyBookingsPage() {
     }
   }, [status, router]);
 
-  // Load bookings
-  useEffect(() => {
-    if (status === 'authenticated') {
-      loadBookings();
-    }
-  }, [status]);
-
-  // Filter bookings
-  useEffect(() => {
-    filterBookings();
-  }, [bookings, statusFilter, searchQuery]);
-
   const loadBookings = async () => {
     try {
       setLoading(true);
@@ -113,7 +101,7 @@ export default function MyBookingsPage() {
     }
   };
 
-  const filterBookings = () => {
+  const filterBookings = useCallback(() => {
     let filtered = [...bookings];
     
     // Filter by status
@@ -135,7 +123,19 @@ export default function MyBookingsPage() {
     filtered.sort((a, b) => new Date(b.bookingDate).getTime() - new Date(a.bookingDate).getTime());
     
     setFilteredBookings(filtered);
-  };
+  }, [bookings, statusFilter, searchQuery]);
+
+  // Load bookings
+  useEffect(() => {
+    if (status === 'authenticated') {
+      loadBookings();
+    }
+  }, [status]);
+
+  // Filter bookings
+  useEffect(() => {
+    filterBookings();
+  }, [bookings, statusFilter, searchQuery, filterBookings]);
 
   const handleCancelBooking = async () => {
     if (!cancelReason.trim()) {

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { generateBookingNumber } from "@/lib/utils/booking";
+// import { generateBookingNumber } from "@/lib/utils/booking"; // Not used in waitlist
 import { z } from "zod";
 
 // Add a waitlist entry when the desired time slot is full
@@ -141,7 +141,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          message: error.errors[0].message,
+          message: error.issues[0].message,
         },
         { status: 400 }
       );
@@ -159,7 +159,7 @@ export async function POST(request: NextRequest) {
 }
 
 // GET - Get user's waitlist entries
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {

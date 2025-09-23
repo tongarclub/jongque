@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 
 // DELETE - Leave waitlist
 export async function DELETE(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
