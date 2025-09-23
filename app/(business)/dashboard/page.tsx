@@ -501,9 +501,25 @@ function BusinessDashboardContent() {
                   <Button
                     variant="outline"
                     className="w-full justify-start"
+                    onClick={() => router.push('/business/analytics')}
+                  >
+                    📊 Analytics Dashboard
+                  </Button>
+                  
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start"
                     onClick={() => router.push('/business/reports')}
                   >
-                    📊 รายงานยอดจอง
+                    📋 รายงานยอดจอง
+                  </Button>
+                  
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start"
+                    onClick={() => router.push('/business/availability')}
+                  >
+                    📅 การตั้งค่าความพร้อมใช้งาน
                   </Button>
                   
                   <Button

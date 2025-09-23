@@ -123,6 +123,8 @@ model Business {
   operatingHours OperatingHours[]
   blackoutDates BlackoutDate[]
   waitlist    Waitlist[]
+  availabilitySettings AvailabilitySettings?
+  holidays    Holiday[]
   subscription Subscription?
 
   @@map("businesses")
@@ -288,6 +290,43 @@ model Waitlist {
   staff       Staff?   @relation(fields: [staffId], references: [id], onDelete: SetNull)
   
   @@map("waitlist")
+}
+
+// Availability Settings
+model AvailabilitySettings {
+  id                   String    @id @default(cuid())
+  advanceBookingDays   Int       @default(30)
+  sameDayBooking       Boolean   @default(true)
+  bufferTimeMinutes    Int       @default(15)
+  maxBookingsPerDay    Int       @default(50)
+  allowWalkIn          Boolean   @default(true)
+  requirePhone         Boolean   @default(false)
+  autoConfirmBookings  Boolean   @default(true)
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  // Relationships
+  businessId String    @unique
+  business   Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@map("availability_settings")
+}
+
+// Holiday Management
+model Holiday {
+  id          String    @id @default(cuid())
+  name        String
+  date        DateTime  @db.Date
+  isRecurring Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relationships
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@unique([businessId, date])
+  @@map("holidays")
 }
 
 // Subscription Management
