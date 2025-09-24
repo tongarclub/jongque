@@ -31,7 +31,9 @@
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
     "test:comprehensive": "playwright test --reporter=html",
-    "test:report": "playwright show-report"
+    "test:report": "playwright show-report",
+    "scheduler:reminder": "node scripts/run-reminder-scheduler.js",
+    "test:notifications": "echo 'Testing notification system...' && curl -X GET http://localhost:3000/api/notifications/test || echo 'Server not running'"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
@@ -41,7 +43,8 @@
     "@hookform/resolvers": "^5.2.1",
     "@next/bundle-analyzer": "^15.4.6",
     "@prisma/client": "^6.14.0",
-    "@stripe/stripe-js": "^7.8.0",
+    "@stripe/react-stripe-js": "^4.0.2",
+    "@stripe/stripe-js": "^7.9.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/nodemailer": "^6.4.17",
     "@types/redis": "^4.0.10",
@@ -59,7 +62,7 @@
     "react-dom": "19.1.0",
     "react-hook-form": "^7.62.0",
     "redis": "^5.8.1",
-    "stripe": "^18.4.0",
+    "stripe": "^18.5.0",
     "twilio": "^5.9.0",
     "zod": "^4.0.17"
   },

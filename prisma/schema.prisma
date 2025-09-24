@@ -21,6 +21,12 @@ model User {
   role      UserRole @default(CUSTOMER)
   isVerified Boolean @default(false) // Email verification
   isPhoneVerified Boolean @default(false) // Phone verification
+  
+  // LINE Integration
+  lineUserId    String?   @unique
+  lineDisplayName String?
+  linePictureUrl String?
+  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -34,6 +40,10 @@ model User {
   
   // Business owner relationships
   business  Business?
+  
+  // Notification relationships
+  sentNotifications Notification[] @relation("NotificationSender")
+  receivedNotifications Notification[] @relation("NotificationRecipient")
 
   @@map("users")
 }
@@ -103,12 +113,45 @@ model Business {
   address     String?
   subdomain   String?  @unique
   customDomain String? @unique
+  
+  // Branding & Customization
   logo        String?
   coverImage  String?
   primaryColor String @default("#3b82f6")
   secondaryColor String @default("#f3f4f6")
+  accentColor String @default("#10b981") // Green accent
+  backgroundColor String @default("#ffffff")
+  textColor   String @default("#1f2937")
+  
+  // Typography
+  fontFamily  String @default("Inter") // Primary font
+  fontHeading String @default("Inter") // Heading font
+  fontSize    String @default("base") // text-sm, base, lg, xl
+  
+  // Theme & Template
+  themeTemplate String @default("modern") // modern, classic, minimal, colorful
+  customCSS   String? // Custom CSS for advanced users
+  
+  // Content Customization
   welcomeMessage String?
   termsOfService String?
+  privacyPolicy String?
+  aboutUs       String?
+  
+  // Gallery & Media
+  galleryImages Json? // Array of image URLs
+  socialMedia   Json? // Social media links {facebook, instagram, line, etc}
+  
+  // SEO & Meta
+  metaTitle     String?
+  metaDescription String?
+  metaKeywords  String?
+  
+  // Language & Localization
+  language      String @default("th") // th, en
+  timeZone      String @default("Asia/Bangkok")
+  currency      String @default("THB")
+  
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -246,7 +289,8 @@ model Booking {
   staffId     String?
   staff       Staff?    @relation(fields: [staffId], references: [id], onDelete: SetNull)
   
-  notifications BookingNotification[]
+  bookingNotifications BookingNotification[]
+  notifications Notification[]
 
   @@map("bookings")
 }
@@ -264,6 +308,30 @@ model BookingNotification {
   booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
 
   @@map("booking_notifications")
+}
+
+// General Notification System
+model Notification {
+  id              String           @id @default(cuid())
+  type            String           // BOOKING_CONFIRMATION, BOOKING_REMINDER, QUEUE_STATUS_UPDATE, etc.
+  recipientType   String           // email, line, sms
+  recipientAddress String          // email address, LINE user ID, or phone number
+  status          NotificationStatus @default(PENDING)
+  data            Json?            // Notification payload data
+  sentAt          DateTime?
+  error           String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  // Relationships
+  senderId        String?
+  sender          User?    @relation("NotificationSender", fields: [senderId], references: [id], onDelete: SetNull)
+  recipientId     String?
+  recipient       User?    @relation("NotificationRecipient", fields: [recipientId], references: [id], onDelete: SetNull)
+  bookingId       String?
+  booking         Booking? @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+
+  @@map("notifications")
 }
 
 // Waitlist System
@@ -332,10 +400,10 @@ model Holiday {
 // Subscription Management
 model Subscription {
   id                String             @id @default(cuid())
-  tier              SubscriptionTier
-  status            SubscriptionStatus @default(ACTIVE)
-  currentPeriodStart DateTime
-  currentPeriodEnd   DateTime
+  tier              SubscriptionTier   @default(FREE)
+  status            SubscriptionStatus @default(INACTIVE)
+  currentPeriodStart DateTime?
+  currentPeriodEnd   DateTime?
   cancelAtPeriodEnd  Boolean           @default(false)
   trialStart        DateTime?
   trialEnd          DateTime?
@@ -344,12 +412,14 @@ model Subscription {
 
   // Payment info
   stripeCustomerId     String?
-  stripeSubscriptionId String?
+  stripeSubscriptionId String? @unique
+  stripePriceId        String?
   
   // Relationships
   businessId String   @unique
   business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
   payments   Payment[]
+  invoices   Invoice[]
 
   @@map("subscriptions")
 }
@@ -361,8 +431,13 @@ model Payment {
   status          PaymentStatus @default(PENDING)
   paymentDate     DateTime?
   paymentMethod   String?
-  stripePaymentId String?
+  stripePaymentId String?       @unique
+  stripeInvoiceId String?       @unique
+  stripeChargeId  String?       @unique
   invoiceUrl      String?
+  receiptUrl      String?
+  description     String?
+  metadata        Json?         // Additional payment metadata
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
 
@@ -371,6 +446,45 @@ model Payment {
   subscription   Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
 
   @@map("payments")
+}
+
+model Invoice {
+  id                    String        @id @default(cuid())
+  subscriptionId        String
+  invoiceNumber         String        @unique
+  amount                Decimal       @db.Decimal(10, 2)
+  currency              String        @default("THB")
+  status                String        @default("DRAFT") // DRAFT, SENT, PAID, OVERDUE, CANCELLED
+  
+  // Invoice details
+  issueDate             DateTime      @default(now())
+  dueDate               DateTime
+  paidDate              DateTime?
+  description           String?
+  notes                 String?
+  
+  // Stripe integration
+  stripeInvoiceId       String?       @unique
+  hostedInvoiceUrl      String?
+  invoicePdf            String?
+  
+  // Line items (stored as JSON for flexibility)
+  lineItems             Json          // Array of invoice line items
+  
+  // Tax and totals
+  subtotal              Decimal       @default(0) @db.Decimal(10, 2)
+  taxAmount             Decimal       @default(0) @db.Decimal(10, 2)
+  discount              Decimal       @default(0) @db.Decimal(10, 2)
+  total                 Decimal       @db.Decimal(10, 2)
+  
+  // Metadata
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+  
+  // Relationships
+  subscription          Subscription  @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  
+  @@map("invoices")
 }
 
 // Enums
@@ -410,6 +524,7 @@ enum NotificationStatus {
 }
 
 enum SubscriptionTier {
+  FREE      // Free tier with limited features
   BASIC     // 300 THB
   PRO       // 600 THB
   ENTERPRISE // 1000 THB
@@ -417,6 +532,7 @@ enum SubscriptionTier {
 
 enum SubscriptionStatus {
   ACTIVE
+  INACTIVE
   PAST_DUE
   CANCELLED
   INCOMPLETE
@@ -425,8 +541,10 @@ enum SubscriptionStatus {
 
 enum PaymentStatus {
   PENDING
+  PROCESSING
   SUCCEEDED
   FAILED
+  CANCELLED
   REFUNDED
 }
 
