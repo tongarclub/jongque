@@ -10,11 +10,8 @@ const createNextIntlPlugin = require('next-intl/plugin');
 const withNextIntl = createNextIntlPlugin('./lib/i18n/index.ts');
 
 const nextConfig = {
-  // Enable experimental features
-  experimental: {
-    // Enable Server Components
-    serverComponentsExternalPackages: ['@prisma/client']
-  },
+  // Enable external packages
+  serverExternalPackages: ['@prisma/client'],
 
   // Image optimization
   images: {

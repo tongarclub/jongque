@@ -69,7 +69,7 @@ async function sendSingleNotification({
         recipientAddress: recipient.address,
         recipientId: recipient.id,
         senderId: userId || null,
-        data,
+        data: data as any,
         status: 'PENDING',
         bookingId: data.bookingId || null
       }

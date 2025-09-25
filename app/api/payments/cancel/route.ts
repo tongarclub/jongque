@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { PrismaClient } from '@prisma/client';
-import { stripeService } from '@/lib/payments/stripe';
+import { stripeService, stripe, ensureStripeInitialized } from '@/lib/payments/stripe';
 
 const prisma = new PrismaClient();
 
@@ -149,7 +149,7 @@ export async function PUT(req: NextRequest) {
         
         if (stripeSubscription.cancel_at_period_end) {
           // Remove cancellation from Stripe
-          await stripeService.stripe.subscriptions.update(subscription.stripeSubscriptionId, {
+          await ensureStripeInitialized().subscriptions.update(subscription.stripeSubscriptionId, {
             cancel_at_period_end: false
           });
         }

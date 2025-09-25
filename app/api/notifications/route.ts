@@ -90,7 +90,7 @@ export async function GET(req: NextRequest) {
               id: true, 
               bookingNumber: true, 
               bookingDate: true, 
-              timeSlot: true,
+              bookingTime: true,
               service: { select: { name: true } },
               business: { select: { name: true } }
             } 

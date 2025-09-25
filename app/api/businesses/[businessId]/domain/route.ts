@@ -8,8 +8,9 @@ const prisma = new PrismaClient();
 // GET /api/businesses/[businessId]/domain - Get domain settings
 export async function GET(
   req: NextRequest,
-  { params }: { params: { businessId: string } }
+  context: { params: Promise<{ businessId: string }> }
 ) {
+  const params = await context.params;
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user) {
@@ -58,8 +59,9 @@ export async function GET(
 // PUT /api/businesses/[businessId]/domain - Update domain settings
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { businessId: string } }
+  context: { params: Promise<{ businessId: string }> }
 ) {
+  const params = await context.params;
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user) {
@@ -167,8 +169,9 @@ export async function PUT(
 // POST /api/businesses/[businessId]/domain/verify - Verify custom domain
 export async function POST(
   req: NextRequest,
-  { params }: { params: { businessId: string } }
+  context: { params: Promise<{ businessId: string }> }
 ) {
+  const params = await context.params;
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user) {

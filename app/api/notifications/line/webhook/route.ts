@@ -194,7 +194,7 @@ async function handleStatusInquiry(userId: string, replyToken: string) {
         message += `   🏪 ${booking.business?.name}\n`;
         message += `   💄 ${booking.service?.name}\n`;
         message += `   📅 ${new Date(booking.bookingDate).toLocaleDateString('th-TH')}\n`;
-        message += `   ⏰ ${booking.timeSlot}\n`;
+        message += `   ⏰ ${booking.bookingTime || 'ไม่ระบุ'}\n`;
         message += `   📍 สถานะ: ${getStatusText(booking.status)}\n\n`;
       });
 

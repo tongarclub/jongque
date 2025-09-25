@@ -93,9 +93,9 @@ export async function GET(req: NextRequest) {
       } : null,
       stripeInfo: stripeSubscription ? {
         status: stripeSubscription.status,
-        currentPeriodEnd: new Date(stripeSubscription.current_period_end * 1000),
-        cancelAtPeriodEnd: stripeSubscription.cancel_at_period_end,
-        trialEnd: stripeSubscription.trial_end ? new Date(stripeSubscription.trial_end * 1000) : null
+        currentPeriodEnd: new Date((stripeSubscription as any).current_period_end * 1000),
+        cancelAtPeriodEnd: (stripeSubscription as any).cancel_at_period_end,
+        trialEnd: (stripeSubscription as any).trial_end ? new Date((stripeSubscription as any).trial_end * 1000) : null
       } : null,
       recentPayments: subscription.payments.map(payment => ({
         id: payment.id,

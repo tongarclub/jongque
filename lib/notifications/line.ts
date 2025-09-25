@@ -23,15 +23,15 @@ export interface LineUserProfile {
 // LINE notification templates
 export const LINE_MESSAGE_TEMPLATES = {
   BOOKING_CONFIRMATION: (booking: any) => ({
-    type: 'flex',
+    type: 'flex' as const,
     contents: {
-      type: 'bubble',
+      type: 'bubble' as const,
       header: {
-        type: 'box',
-        layout: 'vertical',
+        type: 'box' as const,
+        layout: 'vertical' as const,
         contents: [
           {
-            type: 'text',
+            type: 'text' as const,
             text: '✅ ยืนยันการจองแล้ว',
             weight: 'bold',
             size: 'lg',
@@ -42,57 +42,57 @@ export const LINE_MESSAGE_TEMPLATES = {
         paddingAll: '16px'
       },
       body: {
-        type: 'box',
-        layout: 'vertical',
+        type: 'box' as const,
+        layout: 'vertical' as const,
         spacing: 'md',
         contents: [
           {
-            type: 'text',
+            type: 'text' as const,
             text: `🎫 หมายเลขคิว: ${booking.bookingNumber}`,
             weight: 'bold',
             size: 'md'
           },
           {
-            type: 'separator',
+            type: 'separator' as const,
             margin: 'md'
           },
           {
-            type: 'box',
-            layout: 'vertical',
+            type: 'box' as const,
+            layout: 'vertical' as const,
             spacing: 'sm',
             contents: [
               {
-                type: 'text',
+                type: 'text' as const,
                 text: `🏪 ร้าน: ${booking.business?.name || 'ไม่ระบุ'}`,
                 size: 'sm',
                 color: '#666666'
               },
               {
-                type: 'text',
+                type: 'text' as const,
                 text: `💄 บริการ: ${booking.service?.name || 'ไม่ระบุ'}`,
                 size: 'sm',
                 color: '#666666'
               },
               {
-                type: 'text',
+                type: 'text' as const,
                 text: `👨‍💼 ผู้ให้บริการ: ${booking.staff?.name || 'ไม่ระบุ'}`,
                 size: 'sm',
                 color: '#666666'
               },
               {
-                type: 'text',
+                type: 'text' as const,
                 text: `📅 วันที่: ${new Date(booking.bookingDate).toLocaleDateString('th-TH')}`,
                 size: 'sm',
                 color: '#666666'
               },
               {
-                type: 'text',
+                type: 'text' as const,
                 text: `⏰ เวลา: ${booking.timeSlot}`,
                 size: 'sm',
                 color: '#666666'
               },
               {
-                type: 'text',
+                type: 'text' as const,
                 text: `💰 ราคา: ${booking.service?.price || 0} บาท`,
                 size: 'sm',
                 color: '#666666'
@@ -102,8 +102,8 @@ export const LINE_MESSAGE_TEMPLATES = {
         ]
       },
       footer: {
-        type: 'box',
-        layout: 'vertical',
+        type: 'box' as const,
+        layout: 'vertical' as const,
         contents: [
           {
             type: 'button',
@@ -121,15 +121,15 @@ export const LINE_MESSAGE_TEMPLATES = {
   }),
 
   BOOKING_REMINDER: (booking: any) => ({
-    type: 'flex',
+    type: 'flex' as const,
     contents: {
-      type: 'bubble',
+      type: 'bubble' as const,
       header: {
-        type: 'box',
-        layout: 'vertical',
+        type: 'box' as const,
+        layout: 'vertical' as const,
         contents: [
           {
-            type: 'text',
+            type: 'text' as const,
             text: '⏰ แจ้งเตือนการจอง',
             weight: 'bold',
             size: 'lg',
@@ -140,45 +140,45 @@ export const LINE_MESSAGE_TEMPLATES = {
         paddingAll: '16px'
       },
       body: {
-        type: 'box',
-        layout: 'vertical',
+        type: 'box' as const,
+        layout: 'vertical' as const,
         spacing: 'md',
         contents: [
           {
-            type: 'text',
+            type: 'text' as const,
             text: `คุณมีนัดหมายในอีก 30 นาที`,
             weight: 'bold',
             size: 'md'
           },
           {
-            type: 'separator',
+            type: 'separator' as const,
             margin: 'md'
           },
           {
-            type: 'box',
-            layout: 'vertical',
+            type: 'box' as const,
+            layout: 'vertical' as const,
             spacing: 'sm',
             contents: [
               {
-                type: 'text',
+                type: 'text' as const,
                 text: `🎫 หมายเลขคิว: ${booking.bookingNumber}`,
                 size: 'sm',
                 color: '#666666'
               },
               {
-                type: 'text',
+                type: 'text' as const,
                 text: `🏪 ร้าน: ${booking.business?.name || 'ไม่ระบุ'}`,
                 size: 'sm',
                 color: '#666666'
               },
               {
-                type: 'text',
+                type: 'text' as const,
                 text: `💄 บริการ: ${booking.service?.name || 'ไม่ระบุ'}`,
                 size: 'sm',
                 color: '#666666'
               },
               {
-                type: 'text',
+                type: 'text' as const,
                 text: `⏰ เวลา: ${booking.timeSlot}`,
                 size: 'sm',
                 color: '#666666'
@@ -191,15 +191,15 @@ export const LINE_MESSAGE_TEMPLATES = {
   }),
 
   QUEUE_STATUS_UPDATE: (booking: any, queuePosition: number, estimatedWaitTime: number) => ({
-    type: 'flex',
+    type: 'flex' as const,
     contents: {
-      type: 'bubble',
+      type: 'bubble' as const,
       header: {
-        type: 'box',
-        layout: 'vertical',
+        type: 'box' as const,
+        layout: 'vertical' as const,
         contents: [
           {
-            type: 'text',
+            type: 'text' as const,
             text: '📋 อัพเดทสถานะคิว',
             weight: 'bold',
             size: 'lg',
@@ -210,39 +210,39 @@ export const LINE_MESSAGE_TEMPLATES = {
         paddingAll: '16px'
       },
       body: {
-        type: 'box',
-        layout: 'vertical',
+        type: 'box' as const,
+        layout: 'vertical' as const,
         spacing: 'md',
         contents: [
           {
-            type: 'text',
+            type: 'text' as const,
             text: `🎫 หมายเลขคิว: ${booking.bookingNumber}`,
             weight: 'bold',
             size: 'md'
           },
           {
-            type: 'separator',
+            type: 'separator' as const,
             margin: 'md'
           },
           {
-            type: 'box',
-            layout: 'vertical',
+            type: 'box' as const,
+            layout: 'vertical' as const,
             spacing: 'sm',
             contents: [
               {
-                type: 'text',
+                type: 'text' as const,
                 text: `📍 ตำแหน่งในคิว: ${queuePosition}`,
                 size: 'sm',
                 color: '#666666'
               },
               {
-                type: 'text',
+                type: 'text' as const,
                 text: `⏱️ เวลารอโดยประมาณ: ${estimatedWaitTime} นาที`,
                 size: 'sm',
                 color: '#666666'
               },
               {
-                type: 'text',
+                type: 'text' as const,
                 text: `🏪 ร้าน: ${booking.business?.name || 'ไม่ระบุ'}`,
                 size: 'sm',
                 color: '#666666'
@@ -255,15 +255,15 @@ export const LINE_MESSAGE_TEMPLATES = {
   }),
 
   BOOKING_CANCELLED: (booking: any, reason?: string) => ({
-    type: 'flex',
+    type: 'flex' as const,
     contents: {
-      type: 'bubble',
+      type: 'bubble' as const,
       header: {
-        type: 'box',
-        layout: 'vertical',
+        type: 'box' as const,
+        layout: 'vertical' as const,
         contents: [
           {
-            type: 'text',
+            type: 'text' as const,
             text: '❌ การจองถูกยกเลิก',
             weight: 'bold',
             size: 'lg',
@@ -274,23 +274,23 @@ export const LINE_MESSAGE_TEMPLATES = {
         paddingAll: '16px'
       },
       body: {
-        type: 'box',
-        layout: 'vertical',
+        type: 'box' as const,
+        layout: 'vertical' as const,
         spacing: 'md',
         contents: [
           {
-            type: 'text',
+            type: 'text' as const,
             text: `🎫 หมายเลขคิว: ${booking.bookingNumber}`,
             weight: 'bold',
             size: 'md'
           },
           ...(reason ? [
             {
-              type: 'separator',
+              type: 'separator' as const,
               margin: 'md'
             },
             {
-              type: 'text',
+              type: 'text' as const,
               text: `📝 เหตุผล: ${reason}`,
               size: 'sm',
               color: '#666666'
@@ -377,7 +377,7 @@ class LineNotificationService {
 
   // Send text message (convenience method)
   public async sendTextMessage(userId: string, text: string): Promise<LineNotificationResult> {
-    return this.sendMessage(userId, { type: 'text', text });
+    return this.sendMessage(userId, { type: 'text' as const, text });
   }
 
   // Get user profile

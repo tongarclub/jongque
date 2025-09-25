@@ -432,7 +432,7 @@ export default function ContentManagementPage() {
                   ) : (
                     <div className="text-center py-12 text-gray-500">
                       <FileText className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-                      <p>คลิก "ดูตัวอย่าง" เพื่อแสดงเนื้อหา</p>
+                      <p>คลิก &quot;ดูตัวอย่าง&quot; เพื่อแสดงเนื้อหา</p>
                     </div>
                   )}
                 </Card>

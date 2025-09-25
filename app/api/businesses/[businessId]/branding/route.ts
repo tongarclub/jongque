@@ -9,8 +9,9 @@ const prisma = new PrismaClient();
 // GET /api/businesses/[businessId]/branding - Get business branding settings
 export async function GET(
   req: NextRequest,
-  { params }: { params: { businessId: string } }
+  context: { params: Promise<{ businessId: string }> }
 ) {
+  const params = await context.params;
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user) {
@@ -87,8 +88,9 @@ export async function GET(
 // PUT /api/businesses/[businessId]/branding - Update business branding settings
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { businessId: string } }
+  context: { params: Promise<{ businessId: string }> }
 ) {
+  const params = await context.params;
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user) {
@@ -209,8 +211,9 @@ export async function PUT(
 // POST /api/businesses/[businessId]/branding/preview - Generate preview CSS
 export async function POST(
   req: NextRequest,
-  { params }: { params: { businessId: string } }
+  context: { params: Promise<{ businessId: string }> }
 ) {
+  const params = await context.params;
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user) {

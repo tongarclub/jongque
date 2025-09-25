@@ -67,11 +67,12 @@ export async function POST(req: NextRequest) {
     });
 
     // Extract client secret from payment intent
-    const clientSecret = subscription.latest_invoice && 
-      typeof subscription.latest_invoice !== 'string' &&
-      subscription.latest_invoice.payment_intent &&
-      typeof subscription.latest_invoice.payment_intent !== 'string'
-        ? subscription.latest_invoice.payment_intent.client_secret
+    const latestInvoice = subscription.latest_invoice as any;
+    const clientSecret = latestInvoice && 
+      typeof latestInvoice !== 'string' &&
+      latestInvoice.payment_intent &&
+      typeof latestInvoice.payment_intent !== 'string'
+        ? latestInvoice.payment_intent.client_secret
         : null;
 
     return NextResponse.json({

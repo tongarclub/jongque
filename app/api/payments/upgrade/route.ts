@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
           subscription: {
             tier: newTier,
             status: subscription.status,
-            currentPeriodEnd: new Date(updatedSubscription.current_period_end * 1000)
+            currentPeriodEnd: new Date((updatedSubscription as any).current_period_end * 1000)
           }
         });
 

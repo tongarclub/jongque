@@ -59,7 +59,7 @@ export class InvoiceService {
           description: data.description,
           notes: data.notes,
           dueDate: data.dueDate || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days default
-          lineItems: data.lineItems,
+          lineItems: data.lineItems as any,
           status: 'DRAFT'
         }
       });

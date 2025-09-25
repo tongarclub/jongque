@@ -9,8 +9,9 @@ const prisma = new PrismaClient();
 // GET /api/payments/invoices/[invoiceId] - Get specific invoice
 export async function GET(
   req: NextRequest,
-  { params }: { params: { invoiceId: string } }
+  context: { params: Promise<{ invoiceId: string }> }
 ) {
+  const params = await context.params;
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user) {
@@ -52,8 +53,9 @@ export async function GET(
 // PUT /api/payments/invoices/[invoiceId] - Update invoice status
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { invoiceId: string } }
+  context: { params: Promise<{ invoiceId: string }> }
 ) {
+  const params = await context.params;
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user || session.user.role !== 'BUSINESS_OWNER') {

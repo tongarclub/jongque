@@ -3,11 +3,11 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-// Initialize Stripe with secret key
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2024-12-18.acacia',
+// Initialize Stripe with secret key (handle missing key for build)
+const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: '2025-08-27.basil',
   typescript: true,
-});
+}) : null;
 
 // Subscription tiers configuration
 export const SUBSCRIPTION_TIERS = {
@@ -98,7 +98,7 @@ export class StripePaymentService {
     businessId?: string;
   }): Promise<Stripe.Customer> {
     try {
-      const customer = await stripe.customers.create({
+      const customer = await ensureStripeInitialized().customers.create({
         email: data.email,
         name: data.name,
         phone: data.phone,
@@ -140,7 +140,7 @@ export class StripePaymentService {
         subscriptionData.trial_period_days = data.trialDays;
       }
 
-      const subscription = await stripe.subscriptions.create(subscriptionData);
+      const subscription = await ensureStripeInitialized().subscriptions.create(subscriptionData);
       return subscription;
     } catch (error) {
       console.error('Error creating subscription:', error);
@@ -151,7 +151,7 @@ export class StripePaymentService {
   // Get subscription details
   async getSubscription(subscriptionId: string): Promise<Stripe.Subscription> {
     try {
-      const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+      const subscription = await ensureStripeInitialized().subscriptions.retrieve(subscriptionId);
       return subscription;
     } catch (error) {
       console.error('Error getting subscription:', error);
@@ -163,11 +163,11 @@ export class StripePaymentService {
   async cancelSubscription(subscriptionId: string, immediately = false): Promise<Stripe.Subscription> {
     try {
       if (immediately) {
-        const subscription = await stripe.subscriptions.cancel(subscriptionId);
+        const subscription = await ensureStripeInitialized().subscriptions.cancel(subscriptionId);
         return subscription;
       } else {
         // Cancel at period end
-        const subscription = await stripe.subscriptions.update(subscriptionId, {
+        const subscription = await ensureStripeInitialized().subscriptions.update(subscriptionId, {
           cancel_at_period_end: true
         });
         return subscription;
@@ -181,9 +181,9 @@ export class StripePaymentService {
   // Update subscription
   async updateSubscription(subscriptionId: string, priceId: string): Promise<Stripe.Subscription> {
     try {
-      const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+      const subscription = await ensureStripeInitialized().subscriptions.retrieve(subscriptionId);
       
-      const updatedSubscription = await stripe.subscriptions.update(subscriptionId, {
+      const updatedSubscription = await ensureStripeInitialized().subscriptions.update(subscriptionId, {
         items: [{
           id: subscription.items.data[0].id,
           price: priceId,
@@ -207,7 +207,7 @@ export class StripePaymentService {
     metadata?: Record<string, string>;
   }): Promise<Stripe.PaymentIntent> {
     try {
-      const paymentIntent = await stripe.paymentIntents.create({
+      const paymentIntent = await ensureStripeInitialized().paymentIntents.create({
         amount: Math.round(data.amount * 100), // Convert to cents
         currency: data.currency.toLowerCase(),
         customer: data.customerId,
@@ -226,7 +226,7 @@ export class StripePaymentService {
   // Get customer payment methods
   async getPaymentMethods(customerId: string): Promise<Stripe.PaymentMethod[]> {
     try {
-      const paymentMethods = await stripe.paymentMethods.list({
+      const paymentMethods = await ensureStripeInitialized().paymentMethods.list({
         customer: customerId,
         type: 'card'
       });
@@ -241,7 +241,7 @@ export class StripePaymentService {
   // Create billing portal session
   async createBillingPortalSession(customerId: string, returnUrl: string): Promise<Stripe.BillingPortal.Session> {
     try {
-      const session = await stripe.billingPortal.sessions.create({
+      const session = await ensureStripeInitialized().billingPortal.sessions.create({
         customer: customerId,
         return_url: returnUrl,
       });
@@ -257,7 +257,7 @@ export class StripePaymentService {
   async handleWebhook(body: string, signature: string): Promise<{ processed: boolean; event?: Stripe.Event }> {
     try {
       const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET || '';
-      const event = stripe.webhooks.constructEvent(body, signature, endpointSecret);
+      const event = ensureStripeInitialized().webhooks.constructEvent(body, signature, endpointSecret);
 
       console.log('Processing Stripe webhook:', event.type);
 
@@ -305,19 +305,19 @@ export class StripePaymentService {
         update: {
           stripeSubscriptionId: subscription.id,
           stripeCustomerId: subscription.customer as string,
-          status: this.mapStripeStatus(subscription.status),
-          currentPeriodStart: new Date(subscription.current_period_start * 1000),
-          currentPeriodEnd: new Date(subscription.current_period_end * 1000),
-          tier: this.getTierFromPriceId(subscription.items.data[0].price.id)
+          status: this.mapStripeStatus(subscription.status) as any,
+          currentPeriodStart: new Date((subscription as any).current_period_start * 1000),
+          currentPeriodEnd: new Date((subscription as any).current_period_end * 1000),
+          tier: this.getTierFromPriceId(subscription.items.data[0].price.id) as any
         },
         create: {
           businessId,
           stripeSubscriptionId: subscription.id,
           stripeCustomerId: subscription.customer as string,
-          status: this.mapStripeStatus(subscription.status),
-          tier: this.getTierFromPriceId(subscription.items.data[0].price.id),
-          currentPeriodStart: new Date(subscription.current_period_start * 1000),
-          currentPeriodEnd: new Date(subscription.current_period_end * 1000)
+          status: this.mapStripeStatus(subscription.status) as any,
+          tier: this.getTierFromPriceId(subscription.items.data[0].price.id) as any,
+          currentPeriodStart: new Date((subscription as any).current_period_start * 1000),
+          currentPeriodEnd: new Date((subscription as any).current_period_end * 1000)
         }
       });
 
@@ -335,11 +335,11 @@ export class StripePaymentService {
       await prisma.subscription.update({
         where: { businessId },
         data: {
-          status: this.mapStripeStatus(subscription.status),
-          tier: this.getTierFromPriceId(subscription.items.data[0].price.id),
-          currentPeriodStart: new Date(subscription.current_period_start * 1000),
-          currentPeriodEnd: new Date(subscription.current_period_end * 1000),
-          cancelAtPeriodEnd: subscription.cancel_at_period_end
+          status: this.mapStripeStatus(subscription.status) as any,
+          tier: this.getTierFromPriceId(subscription.items.data[0].price.id) as any,
+          currentPeriodStart: new Date((subscription as any).current_period_start * 1000),
+          currentPeriodEnd: new Date((subscription as any).current_period_end * 1000),
+          cancelAtPeriodEnd: (subscription as any).cancel_at_period_end
         }
       });
 
@@ -369,7 +369,7 @@ export class StripePaymentService {
 
   private async handlePaymentSucceeded(invoice: Stripe.Invoice) {
     try {
-      const subscriptionId = invoice.subscription as string;
+      const subscriptionId = (invoice as any).subscription as string;
       if (!subscriptionId) return;
 
       // Create payment record
@@ -379,9 +379,9 @@ export class StripePaymentService {
           amount: invoice.amount_paid / 100, // Convert from cents
           currency: invoice.currency.toUpperCase(),
           status: 'SUCCEEDED',
-          paymentDate: new Date(invoice.status_transitions.paid_at! * 1000),
-          stripePaymentId: invoice.payment_intent as string,
-          invoiceUrl: invoice.hosted_invoice_url
+          paymentDate: new Date(((invoice as any).status_transitions?.paid_at || Date.now() / 1000) * 1000),
+          stripePaymentId: (invoice as any).payment_intent as string,
+          invoiceUrl: (invoice as any).hosted_invoice_url
         }
       });
 
@@ -422,3 +422,11 @@ export const stripeService = new StripePaymentService();
 
 // Export Stripe instance for direct use
 export { stripe };
+
+// Guard function to check if Stripe is initialized
+export function ensureStripeInitialized() {
+  if (!stripe) {
+    throw new Error('Stripe is not initialized. Please set STRIPE_SECRET_KEY environment variable.');
+  }
+  return stripe;
+}

@@ -8,8 +8,9 @@ const prisma = new PrismaClient();
 // GET /api/businesses/[businessId]/gallery - Get gallery images
 export async function GET(
   req: NextRequest,
-  { params }: { params: { businessId: string } }
+  context: { params: Promise<{ businessId: string }> }
 ) {
+  const params = await context.params;
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user) {
@@ -86,8 +87,9 @@ export async function GET(
 // POST /api/businesses/[businessId]/gallery - Add new image
 export async function POST(
   req: NextRequest,
-  { params }: { params: { businessId: string } }
+  context: { params: Promise<{ businessId: string }> }
 ) {
+  const params = await context.params;
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user) {
@@ -161,8 +163,9 @@ export async function POST(
 // PUT /api/businesses/[businessId]/gallery - Update multiple images or reorder
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { businessId: string } }
+  context: { params: Promise<{ businessId: string }> }
 ) {
+  const params = await context.params;
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user) {
@@ -234,8 +237,9 @@ export async function PUT(
 // DELETE /api/businesses/[businessId]/gallery - Delete multiple images
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { businessId: string } }
+  context: { params: Promise<{ businessId: string }> }
 ) {
+  const params = await context.params;
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user) {
