@@ -36,7 +36,7 @@ export async function GET() {
         image: true,
         role: true,
         isVerified: true,
-        isPhoneVerified: true,
+        // isPhoneVerified: true, // Temporarily disabled
         createdAt: true,
         updatedAt: true,
       },
@@ -165,7 +165,7 @@ export async function PUT(request: NextRequest) {
         image: true,
         role: true,
         isVerified: true,
-        isPhoneVerified: true,
+        // isPhoneVerified: true, // Temporarily disabled
         createdAt: true,
         updatedAt: true,
       },

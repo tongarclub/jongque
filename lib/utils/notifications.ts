@@ -260,7 +260,7 @@ export async function getUserNotificationPreferences(userId: string) {
         email: true,
         phone: true,
         lineUserId: true,
-        isPhoneVerified: true,
+        // isPhoneVerified: true, // Temporarily disabled
         isVerified: true
       }
     });
@@ -273,7 +273,7 @@ export async function getUserNotificationPreferences(userId: string) {
         address: user.email
       },
       sms: {
-        enabled: user.phone && user.isPhoneVerified,
+        enabled: user.phone, // && user.isPhoneVerified, // Temporarily simplified
         address: user.phone
       },
       line: {

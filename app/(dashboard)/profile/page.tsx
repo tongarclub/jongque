@@ -32,7 +32,7 @@ interface UserProfile {
   image: string | null;
   role: string;
   isVerified: boolean;
-  isPhoneVerified: boolean;
+  isPhoneVerified?: boolean; // Made optional for compatibility
   createdAt: string;
 }
 
@@ -186,7 +186,7 @@ export default function ProfilePage() {
     setProfile(prev => prev ? { 
       ...prev, 
       phone: verifiedPhone,
-      isPhoneVerified: true 
+      // isPhoneVerified: true // Temporarily disabled 
     } : null);
     
     // Update form data if editing
@@ -361,7 +361,7 @@ export default function ProfilePage() {
                     <Phone className="h-4 w-4 inline mr-2" />
                     เบอร์โทรศัพท์
                     {profile?.phone && (
-                      profile?.isPhoneVerified ? (
+                      profile?.isPhoneVerified === true ? (
                         <span className="ml-2 text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
                           ✓ ยืนยันแล้ว
                         </span>
@@ -388,7 +388,7 @@ export default function ProfilePage() {
                       <p className="text-gray-900 p-2 bg-gray-50 rounded">
                         {profile?.phone || 'ยังไม่ได้กรอก'}
                       </p>
-                      {profile?.phone && !profile?.isPhoneVerified && (
+                      {profile?.phone && profile?.isPhoneVerified !== true && (
                         <Button
                           variant="outline"
                           size="sm"

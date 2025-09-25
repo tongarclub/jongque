@@ -32,7 +32,7 @@ export async function scheduleReminderNotifications() {
             phone: true,
             lineUserId: true,
             isVerified: true,
-            isPhoneVerified: true
+            // isPhoneVerified: true // Temporarily disabled
           }
         },
         business: {
@@ -158,7 +158,7 @@ export async function checkQueueStatusUpdates() {
             phone: true,
             lineUserId: true,
             isVerified: true,
-            isPhoneVerified: true
+            // isPhoneVerified: true // Temporarily disabled
           }
         },
         business: {

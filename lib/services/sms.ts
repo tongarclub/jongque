@@ -201,7 +201,7 @@ class SmsService {
       // Update user phone verification status if user exists
       await prisma.user.updateMany({
         where: { phone: formattedPhone },
-        data: { isPhoneVerified: true }
+        data: { /* isPhoneVerified: true */ } // Temporarily disabled
       });
 
       return { success: true, otpId: otpRecord.id };

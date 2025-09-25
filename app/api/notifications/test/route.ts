@@ -89,7 +89,7 @@ export async function GET(req: NextRequest) {
         phone: true,
         lineUserId: true,
         isVerified: true,
-        isPhoneVerified: true
+        // isPhoneVerified: true // Temporarily disabled
       }
     });
 
@@ -156,7 +156,7 @@ export async function GET(req: NextRequest) {
         phone: user?.phone,
         lineUserId: user?.lineUserId,
         emailVerified: user?.isVerified,
-        phoneVerified: user?.isPhoneVerified,
+        phoneVerified: false, // user?.isPhoneVerified, // Temporarily disabled
         lineConnected: !!user?.lineUserId
       },
       availableTests,

@@ -88,7 +88,7 @@ export async function PUT(request: NextRequest) {
         where: { id: session.user.id },
         data: {
           phone: phone,
-          isPhoneVerified: true
+          // isPhoneVerified: true // Temporarily disabled
         }
       });
 
