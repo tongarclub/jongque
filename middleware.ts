@@ -1,13 +1,4 @@
-import createMiddleware from 'next-intl/middleware';
 import { NextRequest, NextResponse } from 'next/server';
-import { locales, defaultLocale } from './lib/i18n';
-
-// Create the internationalization middleware
-const intlMiddleware = createMiddleware({
-  locales,
-  defaultLocale,
-  localePrefix: 'as-needed' // Only add locale prefix for non-default locales
-});
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -22,15 +13,13 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
   
-  // Handle authentication-protected routes
+  // Handle authentication-protected routes (for future implementation)
   const protectedRoutes = ['/dashboard', '/business', '/profile'];
   const authRoutes = ['/auth/signin', '/auth/signup'];
   
-  // For now, we'll skip authentication middleware and just handle i18n
-  // In a real app, you would add authentication logic here
-  
-  // Apply internationalization middleware
-  return intlMiddleware(request);
+  // For now, just pass through all requests
+  // TODO: Add authentication and i18n logic later
+  return NextResponse.next();
 }
 
 export const config = {
