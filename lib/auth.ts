@@ -80,8 +80,19 @@ export const authOptions: NextAuthOptions = {
           where: {
             email: credentials.email,
           },
-          include: {
-            business: true,
+          select: {
+            id: true,
+            email: true,
+            name: true,
+            image: true,
+            password: true,
+            role: true,
+            isVerified: true,
+            business: {
+              select: {
+                id: true
+              }
+            }
           },
         })
 
@@ -124,7 +135,16 @@ export const authOptions: NextAuthOptions = {
         // Get user from database to get latest info
         const dbUser = await prisma.user.findUnique({
           where: { id: user.id },
-          include: { business: true },
+          select: {
+            id: true,
+            role: true,
+            isVerified: true,
+            business: {
+              select: {
+                id: true
+              }
+            }
+          },
         })
 
         if (dbUser) {
@@ -153,6 +173,14 @@ export const authOptions: NextAuthOptions = {
           if (user.email) {
             existingUser = await prisma.user.findUnique({
               where: { email: user.email },
+              select: {
+                id: true,
+                email: true,
+                name: true,
+                image: true,
+                role: true,
+                isVerified: true,
+              },
             })
           }
 
@@ -165,7 +193,18 @@ export const authOptions: NextAuthOptions = {
                   providerAccountId: account.providerAccountId,
                 },
               },
-              include: { user: true },
+              select: {
+                user: {
+                  select: {
+                    id: true,
+                    email: true,
+                    name: true,
+                    image: true,
+                    role: true,
+                    isVerified: true,
+                  }
+                }
+              },
             })
             
             if (existingAccount) {
